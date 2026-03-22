@@ -1,0 +1,2135 @@
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 1
+
+
+   1              		.file	"main.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.rtcInit,"ax",@progbits
+  10              		.align	1
+  11              		.globl	rtcInit
+  13              	rtcInit:
+  14              	.LFB2:
+  15              		.file 1 "main.c"
+   1:main.c        **** #include "gd32vf103.h"
+   2:main.c        **** #include "drivers.h"
+   3:main.c        **** #include "adc.h"
+   4:main.c        **** #include "lcd.h"
+   5:main.c        **** #include "usart.h"
+   6:main.c        **** #define EI 1
+   7:main.c        **** #define DI 0
+   8:main.c        **** 
+   9:main.c        **** 
+  10:main.c        **** void rtcInit(void){
+  16              		.loc 1 10 19
+  17              		.cfi_startproc
+  11:main.c        ****    // enable power managemenet unit - perhaps enabled by default
+  12:main.c        ****    rcu_periph_clock_enable(RCU_PMU);
+  18              		.loc 1 12 4
+  10:main.c        ****    // enable power managemenet unit - perhaps enabled by default
+  19              		.loc 1 10 19 is_stmt 0
+  20 0000 4111     		addi	sp,sp,-16
+  21              	.LCFI0:
+  22              		.cfi_def_cfa_offset 16
+  23              		.loc 1 12 4
+  24 0002 1305C071 		li	a0,1820
+  10:main.c        ****    // enable power managemenet unit - perhaps enabled by default
+  25              		.loc 1 10 19
+  26 0006 06C6     		sw	ra,12(sp)
+  27 0008 22C4     		sw	s0,8(sp)
+  28              		.cfi_offset 1, -4
+  29              		.cfi_offset 8, -8
+  30              		.loc 1 12 4
+  31 000a 97000000 		call	rcu_periph_clock_enable
+  31      E7800000 
+  32              	.LVL0:
+  13:main.c        ****    // enable write access to the registers in the backup domain
+  14:main.c        ****    pmu_backup_write_enable();
+  33              		.loc 1 14 4 is_stmt 1
+  34 0012 97000000 		call	pmu_backup_write_enable
+  34      E7800000 
+  35              	.LVL1:
+  15:main.c        ****    // enable backup domain
+  16:main.c        ****    rcu_periph_clock_enable(RCU_BKPI);
+  36              		.loc 1 16 4
+  37 001a 1305B071 		li	a0,1819
+  38 001e 97000000 		call	rcu_periph_clock_enable
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 2
+
+
+  38      E7800000 
+  39              	.LVL2:
+  17:main.c        ****    // reset backup domain registers
+  18:main.c        ****    bkp_deinit();
+  40              		.loc 1 18 4
+  41 0026 97000000 		call	bkp_deinit
+  41      E7800000 
+  42              	.LVL3:
+  19:main.c        ****    
+  20:main.c        ****    bkp_rtc_calibration_value_set(0);
+  43              		.loc 1 20 4
+  44 002e 0145     		li	a0,0
+  45 0030 97000000 		call	bkp_rtc_calibration_value_set
+  45      E7800000 
+  46              	.LVL4:
+  21:main.c        **** 
+  22:main.c        ****    // setup RTC
+  23:main.c        ****    // enable external low speed XO (32.768 kHz)
+  24:main.c        ****    // rcu_osci_on(RCU_LXTAL);
+  25:main.c        ****    if (rcu_osci_stab_wait(RCU_LXTAL)) {
+  47              		.loc 1 25 4
+  48              		.loc 1 25 8 is_stmt 0
+  49 0038 0564     		li	s0,4096
+  50 003a 13050480 		addi	a0,s0,-2048
+  51 003e 97000000 		call	rcu_osci_stab_wait
+  51      E7800000 
+  52              	.LVL5:
+  53              		.loc 1 25 7
+  54 0046 25C1     		beq	a0,zero,.L1
+  55              	.LBB4:
+  56              	.LBB5:
+  26:main.c        ****      // use external low speed oscillator, i.e. 32.768 kHz
+  27:main.c        ****      rcu_rtc_clock_config(RCU_RTCSRC_LXTAL);
+  57              		.loc 1 27 6 is_stmt 1
+  58 0048 13050010 		li	a0,256
+  59 004c 97000000 		call	rcu_rtc_clock_config
+  59      E7800000 
+  60              	.LVL6:
+  28:main.c        ****      rcu_periph_clock_enable(RCU_RTC);
+  61              		.loc 1 28 6
+  62 0054 1305F480 		addi	a0,s0,-2033
+  63 0058 97000000 		call	rcu_periph_clock_enable
+  63      E7800000 
+  64              	.LVL7:
+  29:main.c        ****      // wait until shadow registers are synced from the backup domain
+  30:main.c        ****      // over the APB bus
+  31:main.c        ****      rtc_register_sync_wait();
+  65              		.loc 1 31 6
+  66 0060 97000000 		call	rtc_register_sync_wait
+  66      E7800000 
+  67              	.LVL8:
+  32:main.c        ****      // wait until shadow register changes are synced over APB
+  33:main.c        ****      // to the backup domain
+  34:main.c        ****      rtc_lwoff_wait();
+  68              		.loc 1 34 6
+  69 0068 97000000 		call	rtc_lwoff_wait
+  69      E7800000 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 3
+
+
+  70              	.LVL9:
+  35:main.c        ****      // prescale to 1 second: 32768 Hz / 32768 = 1 Hz
+  36:main.c        ****      rtc_prescaler_set(32767);
+  71              		.loc 1 36 6
+  72 0070 2165     		li	a0,32768
+  73 0072 7D15     		addi	a0,a0,-1
+  74 0074 97000000 		call	rtc_prescaler_set
+  74      E7800000 
+  75              	.LVL10:
+  37:main.c        ****      rtc_lwoff_wait();
+  76              		.loc 1 37 6
+  77 007c 97000000 		call	rtc_lwoff_wait
+  77      E7800000 
+  78              	.LVL11:
+  38:main.c        ****      rtc_flag_clear(RTC_INT_FLAG_SECOND);
+  79              		.loc 1 38 6
+  80 0084 0545     		li	a0,1
+  81 0086 97000000 		call	rtc_flag_clear
+  81      E7800000 
+  82              	.LVL12:
+  39:main.c        ****     rtc_interrupt_enable(RTC_INT_SECOND);
+  83              		.loc 1 39 5
+  84 008e 0545     		li	a0,1
+  85 0090 97000000 		call	rtc_interrupt_enable
+  85      E7800000 
+  86              	.LVL13:
+  40:main.c        ****      rtc_lwoff_wait();
+  87              		.loc 1 40 6
+  88              	.LBE5:
+  89              	.LBE4:
+  41:main.c        ****    }
+  42:main.c        **** }
+  90              		.loc 1 42 1 is_stmt 0
+  91 0098 2244     		lw	s0,8(sp)
+  92              		.cfi_remember_state
+  93              		.cfi_restore 8
+  94 009a B240     		lw	ra,12(sp)
+  95              		.cfi_restore 1
+  96 009c 4101     		addi	sp,sp,16
+  97              	.LCFI1:
+  98              		.cfi_def_cfa_offset 0
+  99              	.LBB7:
+ 100              	.LBB6:
+  40:main.c        ****      rtc_lwoff_wait();
+ 101              		.loc 1 40 6
+ 102 009e 17030000 		tail	rtc_lwoff_wait
+ 102      67000300 
+ 103              	.LVL14:
+ 104              	.L1:
+ 105              	.LCFI2:
+ 106              		.cfi_restore_state
+ 107              	.LBE6:
+ 108              	.LBE7:
+ 109              		.loc 1 42 1
+ 110 00a6 B240     		lw	ra,12(sp)
+ 111              		.cfi_restore 1
+ 112 00a8 2244     		lw	s0,8(sp)
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 4
+
+
+ 113              		.cfi_restore 8
+ 114 00aa 4101     		addi	sp,sp,16
+ 115              	.LCFI3:
+ 116              		.cfi_def_cfa_offset 0
+ 117 00ac 8280     		jr	ra
+ 118              		.cfi_endproc
+ 119              	.LFE2:
+ 121              		.section	.text.startup.main,"ax",@progbits
+ 122              		.align	1
+ 123              		.globl	main
+ 125              	main:
+ 126              	.LFB3:
+  43:main.c        **** 
+  44:main.c        **** int main(void){
+ 127              		.loc 1 44 15 is_stmt 1
+ 128              		.cfi_startproc
+  45:main.c        ****     int ms=0, s=0, key, pKey=-1, c=0, idle=0;
+ 129              		.loc 1 45 5
+ 130              	.LVL15:
+  46:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 131              		.loc 1 46 5
+  44:main.c        ****     int ms=0, s=0, key, pKey=-1, c=0, idle=0;
+ 132              		.loc 1 44 15 is_stmt 0
+ 133 0000 3171     		addi	sp,sp,-192
+ 134              	.LCFI4:
+ 135              		.cfi_def_cfa_offset 192
+ 136              		.loc 1 46 9
+ 137 0002 B7050000 		lui	a1,%hi(.LANCHOR0)
+ 138 0006 13060004 		li	a2,64
+ 139 000a 93850500 		addi	a1,a1,%lo(.LANCHOR0)
+ 140 000e 8800     		addi	a0,sp,64
+  44:main.c        ****     int ms=0, s=0, key, pKey=-1, c=0, idle=0;
+ 141              		.loc 1 44 15
+ 142 0010 06DF     		sw	ra,188(sp)
+ 143 0012 22DD     		sw	s0,184(sp)
+ 144 0014 26DB     		sw	s1,180(sp)
+ 145 0016 4AD9     		sw	s2,176(sp)
+ 146 0018 4ED7     		sw	s3,172(sp)
+ 147 001a 52D5     		sw	s4,168(sp)
+ 148 001c 56D3     		sw	s5,164(sp)
+ 149 001e 5AD1     		sw	s6,160(sp)
+ 150 0020 5ECF     		sw	s7,156(sp)
+ 151 0022 62CD     		sw	s8,152(sp)
+ 152 0024 66CB     		sw	s9,148(sp)
+ 153 0026 6AC9     		sw	s10,144(sp)
+ 154 0028 6EC7     		sw	s11,140(sp)
+ 155              		.cfi_offset 1, -4
+ 156              		.cfi_offset 8, -8
+ 157              		.cfi_offset 9, -12
+ 158              		.cfi_offset 18, -16
+ 159              		.cfi_offset 19, -20
+ 160              		.cfi_offset 20, -24
+ 161              		.cfi_offset 21, -28
+ 162              		.cfi_offset 22, -32
+ 163              		.cfi_offset 23, -36
+ 164              		.cfi_offset 24, -40
+ 165              		.cfi_offset 25, -44
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 5
+
+
+ 166              		.cfi_offset 26, -48
+ 167              		.cfi_offset 27, -52
+ 168              		.loc 1 46 9
+ 169 002a 97000000 		call	memcpy
+ 169      E7800000 
+ 170              	.LVL16:
+  47:main.c        ****     int adcr, tmpr;
+ 171              		.loc 1 47 5 is_stmt 1
+  48:main.c        ****     int hexState=0, firstNibble=0, txByte;    // Hex input state machine
+ 172              		.loc 1 48 5
+  49:main.c        ****     char rx;
+ 173              		.loc 1 49 5
+  50:main.c        ****     int curX=80, curY=40;                     // Drawing pen position (screen centre)
+ 174              		.loc 1 50 5
+  51:main.c        ****     int drawDir=0, drawSteps=0, stepMs=0;     // Drawing state machine
+ 175              		.loc 1 51 5
+  52:main.c        ****     int cmdBuf[7], cmdBufLen=0;               // Stored command buffer (max 7)
+ 176              		.loc 1 52 5
+  53:main.c        ****     int cmdBufIdx=0, playing=0;               // Playback state
+ 177              		.loc 1 53 5
+  54:main.c        **** 
+  55:main.c        ****     t5omsi();                               // Initialize timer5 1kHz
+ 178              		.loc 1 55 5
+ 179 0032 97000000 		call	t5omsi
+ 179      E7800000 
+ 180              	.LVL17:
+  56:main.c        ****     colinit();                              // Initialize column toolbox
+ 181              		.loc 1 56 5
+ 182 003a 97000000 		call	colinit
+ 182      E7800000 
+ 183              	.LVL18:
+  57:main.c        ****     l88init();                              // Initialize 8*8 led toolbox
+ 184              		.loc 1 57 5
+ 185 0042 97000000 		call	l88init
+ 185      E7800000 
+ 186              	.LVL19:
+  58:main.c        ****     keyinit();                              // Initialize keyboard toolbox
+ 187              		.loc 1 58 5
+ 188 004a 97000000 		call	keyinit
+ 188      E7800000 
+ 189              	.LVL20:
+  59:main.c        ****     ADC3powerUpInit(1);                     // Initialize ADC0, Ch3
+ 190              		.loc 1 59 5
+ 191 0052 0545     		li	a0,1
+ 192 0054 97000000 		call	ADC3powerUpInit
+ 192      E7800000 
+ 193              	.LVL21:
+  60:main.c        ****     Lcd_SetType(LCD_NORMAL);                // or use LCD_INVERTED!
+ 194              		.loc 1 60 5
+ 195 005c 0145     		li	a0,0
+ 196 005e 97000000 		call	Lcd_SetType
+ 196      E7800000 
+ 197              	.LVL22:
+  61:main.c        ****     Lcd_Init();
+ 198              		.loc 1 61 5
+  62:main.c        ****     LCD_Clear(RED);
+ 199              		.loc 1 62 5 is_stmt 0
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 6
+
+
+ 200 0066 C16D     		li	s11,65536
+  61:main.c        ****     Lcd_Init();
+ 201              		.loc 1 61 5
+ 202 0068 97000000 		call	Lcd_Init
+ 202      E7800000 
+ 203              	.LVL23:
+ 204              		.loc 1 62 5 is_stmt 1
+ 205 0070 13850D80 		addi	a0,s11,-2048
+ 206 0074 97000000 		call	LCD_Clear
+ 206      E7800000 
+ 207              	.LVL24:
+  63:main.c        ****     LCD_ShowStr(10, 10, "Lab #5", WHITE, TRANSPARENT);
+ 208              		.loc 1 63 5
+ 209 007c 37060000 		lui	a2,%hi(.LC1)
+ 210 0080 0547     		li	a4,1
+ 211 0082 9386FDFF 		addi	a3,s11,-1
+ 212 0086 13060600 		addi	a2,a2,%lo(.LC1)
+ 213 008a A945     		li	a1,10
+ 214 008c 2945     		li	a0,10
+ 215 008e 97000000 		call	LCD_ShowStr
+ 215      E7800000 
+ 216              	.LVL25:
+  64:main.c        ****     rtcInit();                              // Initialize RTC
+ 217              		.loc 1 64 5
+ 218 0096 97000000 		call	rtcInit
+ 218      E7800000 
+ 219              	.LVL26:
+  65:main.c        ****     rtc_counter_set(3600+60+1);
+ 220              		.loc 1 65 5
+ 221 009e 0565     		li	a0,4096
+ 222 00a0 1305D5E4 		addi	a0,a0,-435
+ 223 00a4 97000000 		call	rtc_counter_set
+ 223      E7800000 
+ 224              	.LVL27:
+  66:main.c        ****     u0init(EI);                             // Initialize USART0 toolbox
+ 225              		.loc 1 66 5
+ 226 00ac 0545     		li	a0,1
+ 227 00ae 97000000 		call	u0init
+ 227      E7800000 
+ 228              	.LVL28:
+  67:main.c        ****     LCD_DrawPoint(80, 40, WHITE);           // Draw starting dot at screen centre
+ 229              		.loc 1 67 5
+ 230 00b6 1386FDFF 		addi	a2,s11,-1
+ 231 00ba 93058002 		li	a1,40
+ 232 00be 13050005 		li	a0,80
+ 233 00c2 97000000 		call	LCD_DrawPoint
+ 233      E7800000 
+ 234              	.LVL29:
+  68:main.c        **** 
+  69:main.c        ****     eclic_global_interrupt_enable();        // !!! INTERRUPT ENABLED !!!
+ 235              		.loc 1 69 5
+ 236 00ca 97000000 		call	eclic_global_interrupt_enable
+ 236      E7800000 
+ 237              	.LVL30:
+  45:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 238              		.loc 1 45 25 is_stmt 0
+ 239 00d2 FD57     		li	a5,-1
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 7
+
+
+ 240 00d4 3EC8     		sw	a5,16(sp)
+  70:main.c        **** 
+  71:main.c        ****     while (1) 
+  72:main.c        ****     {
+  73:main.c        ****         idle++;                             // Manage Async events
+  74:main.c        ****         LCD_WR_Queue();                     // Manage LCD com queue!
+  75:main.c        ****         u0_TX_Queue();                      // Manage U(S)ART TX Queue!
+  76:main.c        **** 
+  77:main.c        ****         if (adc_flag_get(ADC0,ADC_FLAG_EOC)==SET)  // ...ADC done?
+  78:main.c        ****         {
+  79:main.c        **** 
+  80:main.c        ****           if (adc_flag_get(ADC0,ADC_FLAG_EOIC)==SET) 
+  81:main.c        ****           {
+  82:main.c        ****             tmpr = adc_inserted_data_read(ADC0, ADC_INSERTED_CHANNEL_0);
+  83:main.c        ****             l88mem(7,((0x680-tmpr)/5)+25);              // Temperature on row 7
+  84:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC); 
+  85:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOIC); 
+  86:main.c        ****           }
+  87:main.c        ****           
+  88:main.c        ****           else 
+  89:main.c        ****           {
+  90:main.c        ****             adcr = adc_regular_data_read(ADC0); // ......get data
+  91:main.c        ****             l88mem(4,adcr>>8);                  // ......move data
+  92:main.c        ****             l88mem(5,adcr);                     // ......(view each ms)
+  93:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC); // ......clear IF
+  94:main.c        ****           }
+  95:main.c        ****         }
+  96:main.c        **** 
+  97:main.c        ****         //RX
+  98:main.c        **** 
+  99:main.c        ****         if (usart_flag_get(USART0,USART_FLAG_RBNE)) 
+ 241              		.loc 1 99 13
+ 242 00d6 B7470140 		li	a5,1073823744
+ 243 00da 93870780 		addi	a5,a5,-2048
+  77:main.c        ****         {
+ 244              		.loc 1 77 13
+ 245 00de B72A0140 		li	s5,1073815552
+ 246              		.loc 1 99 13
+ 247 00e2 3ECA     		sw	a5,20(sp)
+ 100:main.c        ****         {
+ 101:main.c        ****           rx = (char)usart_data_receive(USART0);        // Read once into rx
+ 102:main.c        ****           l88mem(6, rx);                                // Display on 8x8 LED row 6
+ 103:main.c        ****         }
+ 104:main.c        **** 
+ 105:main.c        ****         if (t5expq()) 
+ 106:main.c        ****         {                     // Manage periodic tasks
+ 107:main.c        ****             l88row(colset());               // ...8*8LED and Keyboard
+ 108:main.c        ****             ms++;                           // ...One second heart beat
+ 109:main.c        ****             if (ms==1000)
+ 110:main.c        ****             {
+ 111:main.c        ****               ms=0;
+ 112:main.c        ****               l88mem(0,s++);
+ 113:main.c        ****             }
+ 114:main.c        **** 
+ 115:main.c        ****             // Drawing step: one pixel per second
+ 116:main.c        ****             if (drawSteps > 0 && ++stepMs >= 100) {
+ 117:main.c        ****               stepMs = 0;
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 8
+
+
+ 118:main.c        ****               if      (drawDir==2) curY--;  // up
+ 119:main.c        ****               else if (drawDir==4) curX--;  // left
+ 120:main.c        ****               else if (drawDir==6) curX++;  // right
+ 121:main.c        ****               else if (drawDir==8) curY++;  // down
+ 122:main.c        ****               LCD_DrawPoint(curX, curY, WHITE);
+ 248              		.loc 1 122 15
+ 249 00e4 9387FDFF 		addi	a5,s11,-1
+  53:main.c        **** 
+ 250              		.loc 1 53 22
+ 251 00e8 0144     		li	s0,0
+  53:main.c        **** 
+ 252              		.loc 1 53 9
+ 253 00ea 014C     		li	s8,0
+  52:main.c        ****     int cmdBufIdx=0, playing=0;               // Playback state
+ 254              		.loc 1 52 20
+ 255 00ec 014B     		li	s6,0
+  51:main.c        ****     int cmdBuf[7], cmdBufLen=0;               // Stored command buffer (max 7)
+ 256              		.loc 1 51 33
+ 257 00ee 814B     		li	s7,0
+  51:main.c        ****     int cmdBuf[7], cmdBufLen=0;               // Stored command buffer (max 7)
+ 258              		.loc 1 51 20
+ 259 00f0 0149     		li	s2,0
+  51:main.c        ****     int cmdBuf[7], cmdBufLen=0;               // Stored command buffer (max 7)
+ 260              		.loc 1 51 9
+ 261 00f2 014A     		li	s4,0
+  50:main.c        ****     int drawDir=0, drawSteps=0, stepMs=0;     // Drawing state machine
+ 262              		.loc 1 50 18
+ 263 00f4 130D8002 		li	s10,40
+  50:main.c        ****     int drawDir=0, drawSteps=0, stepMs=0;     // Drawing state machine
+ 264              		.loc 1 50 9
+ 265 00f8 930C0005 		li	s9,80
+  48:main.c        ****     char rx;
+ 266              		.loc 1 48 21
+ 267 00fc 02C6     		sw	zero,12(sp)
+  48:main.c        ****     char rx;
+ 268              		.loc 1 48 9
+ 269 00fe 8144     		li	s1,0
+  45:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 270              		.loc 1 45 34
+ 271 0100 8149     		li	s3,0
+  45:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 272              		.loc 1 45 15
+ 273 0102 02C4     		sw	zero,8(sp)
+  45:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 274              		.loc 1 45 9
+ 275 0104 02C2     		sw	zero,4(sp)
+  77:main.c        ****         {
+ 276              		.loc 1 77 13
+ 277 0106 938A0A40 		addi	s5,s5,1024
+ 278              		.loc 1 122 15
+ 279 010a 3ECC     		sw	a5,24(sp)
+ 280              	.LVL31:
+ 281              	.L20:
+ 123:main.c        ****               
+ 124:main.c        ****               if (--drawSteps == 0 && playing) 
+ 125:main.c        **** 
+ 126:main.c        ****               {
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 9
+
+
+ 127:main.c        ****                 if (cmdBufIdx < cmdBufLen) 
+ 128:main.c        ****                 {
+ 129:main.c        ****                   int cmd = cmdBuf[cmdBufIdx++];
+ 130:main.c        ****                   drawDir = (cmd>>4) & 0x0F;
+ 131:main.c        ****                   drawSteps = cmd & 0x0F;
+ 132:main.c        ****                 } 
+ 133:main.c        **** 
+ 134:main.c        ****                 else
+ 135:main.c        ****                 { playing=0; cmdBufLen=0; cmdBufIdx=0; }  // done: clear buffer
+ 136:main.c        ****               }
+ 137:main.c        ****             }
+ 138:main.c        **** 
+ 139:main.c        **** 
+ 140:main.c        ****             if ((key=keyscan())>=0)        // ...Any key pressed?
+ 141:main.c        ****             {
+ 142:main.c        **** 
+ 143:main.c        ****               if (pKey==key) c++; 
+ 144:main.c        ****               
+ 145:main.c        ****               else {c=0; pKey=key;}
+ 146:main.c        **** 
+ 147:main.c        ****               l88mem(1,lookUpTbl[key]+(c<<4));
+ 148:main.c        **** 
+ 149:main.c        ****               if (c==0)                 // New key press (debounced)
+ 150:main.c        ****               {   
+ 151:main.c        **** 
+ 152:main.c        ****                 int hexDigit = lookUpTbl[key]; // 0-15 (* -> E, # -> F)
+ 153:main.c        **** 
+ 154:main.c        ****                 if (hexDigit==13 && hexState==0) 
+ 155:main.c        ****                 
+ 156:main.c        ****                 {
+ 157:main.c        ****                   //D
+ 158:main.c        ****                   if (cmdBufLen > 0) 
+ 159:main.c        ****                   {
+ 160:main.c        ****                     cmdBufIdx = 0; playing = 1;
+ 161:main.c        ****                     int cmd = cmdBuf[cmdBufIdx++];
+ 162:main.c        ****                     drawDir=(cmd>>4)&0x0F; drawSteps=cmd&0x0F; stepMs=0;
+ 163:main.c        ****                   }
+ 164:main.c        **** 
+ 165:main.c        ****                 } 
+ 166:main.c        ****                 
+ 167:main.c        ****                 else if (!playing) 
+ 168:main.c        ****                 {
+ 169:main.c        ****                   if (hexState==0) 
+ 170:main.c        ****                   {
+ 171:main.c        ****                     // FSM state 0: waiting for first hex nibble
+ 172:main.c        ****                     firstNibble = hexDigit;
+ 173:main.c        ****                     hexState = 1;
+ 174:main.c        ****                   } 
+ 175:main.c        ****                   
+ 176:main.c        ****                   else 
+ 177:main.c        ****                   {
+ 178:main.c        ****                     // FSM state 1: store drawing command in buffer
+ 179:main.c        ****                     txByte = (firstNibble<<4) | hexDigit;
+ 180:main.c        **** 
+ 181:main.c        ****                     { int _m = (txByte>>4)&0x0F;
+ 182:main.c        **** 
+ 183:main.c        ****                       if ((_m==2||_m==4||_m==6||_m==8) && (txByte&0x0F)>=1 && cmdBufLen<7)
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 10
+
+
+ 184:main.c        ****                         cmdBuf[cmdBufLen++] = txByte;  // store, do not execute yet
+ 185:main.c        ****                     }
+ 186:main.c        ****                     hexState = 0;
+ 187:main.c        ****                   }
+ 188:main.c        ****                 }
+ 189:main.c        ****               }
+ 190:main.c        ****             } 
+ 191:main.c        **** 
+ 192:main.c        ****             else
+ 193:main.c        ****              {
+ 194:main.c        ****               // Key released: re-arm debounce so same key can be entered again
+ 195:main.c        ****               pKey = -1;
+ 196:main.c        ****               c = 0;
+ 197:main.c        ****             }
+ 198:main.c        ****             l88mem(2,idle>>8);              // ...Performance monitor
+ 199:main.c        ****             l88mem(3,idle); idle=0;
+ 200:main.c        ****             adc_software_trigger_enable(ADC0, //Trigger another ADC conversion!
+ 282              		.loc 1 200 13
+ 283 010c 814D     		li	s11,0
+ 284              	.LVL32:
+ 285              	.L8:
+  71:main.c        ****     {
+ 286              		.loc 1 71 5 is_stmt 1
+  73:main.c        ****         LCD_WR_Queue();                     // Manage LCD com queue!
+ 287              		.loc 1 73 9
+  74:main.c        ****         u0_TX_Queue();                      // Manage U(S)ART TX Queue!
+ 288              		.loc 1 74 9 is_stmt 0
+ 289 010e 97000000 		call	LCD_WR_Queue
+ 289      E7800000 
+ 290              	.LVL33:
+  75:main.c        **** 
+ 291              		.loc 1 75 9
+ 292 0116 97000000 		call	u0_TX_Queue
+ 292      E7800000 
+ 293              	.LVL34:
+  77:main.c        ****         {
+ 294              		.loc 1 77 13
+ 295 011e 8945     		li	a1,2
+ 296 0120 5685     		mv	a0,s5
+ 297 0122 97000000 		call	adc_flag_get
+ 297      E7800000 
+ 298              	.LVL35:
+  77:main.c        ****         {
+ 299              		.loc 1 77 12
+ 300 012a 8547     		li	a5,1
+  73:main.c        ****         LCD_WR_Queue();                     // Manage LCD com queue!
+ 301              		.loc 1 73 13
+ 302 012c 850D     		addi	s11,s11,1
+ 303              	.LVL36:
+  74:main.c        ****         u0_TX_Queue();                      // Manage U(S)ART TX Queue!
+ 304              		.loc 1 74 9 is_stmt 1
+  75:main.c        **** 
+ 305              		.loc 1 75 9
+  77:main.c        ****         {
+ 306              		.loc 1 77 9
+  77:main.c        ****         {
+ 307              		.loc 1 77 12 is_stmt 0
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 11
+
+
+ 308 012e 631AF504 		bne	a0,a5,.L5
+  80:main.c        ****           {
+ 309              		.loc 1 80 11 is_stmt 1
+  80:main.c        ****           {
+ 310              		.loc 1 80 15 is_stmt 0
+ 311 0132 9145     		li	a1,4
+ 312 0134 5685     		mv	a0,s5
+ 313 0136 97000000 		call	adc_flag_get
+ 313      E7800000 
+ 314              	.LVL37:
+  80:main.c        ****           {
+ 315              		.loc 1 80 14
+ 316 013e 8547     		li	a5,1
+ 317 0140 6312F518 		bne	a0,a5,.L6
+  82:main.c        ****             l88mem(7,((0x680-tmpr)/5)+25);              // Temperature on row 7
+ 318              		.loc 1 82 13 is_stmt 1
+  82:main.c        ****             l88mem(7,((0x680-tmpr)/5)+25);              // Temperature on row 7
+ 319              		.loc 1 82 20 is_stmt 0
+ 320 0144 8145     		li	a1,0
+ 321 0146 5685     		mv	a0,s5
+ 322 0148 97000000 		call	adc_inserted_data_read
+ 322      E7800000 
+ 323              	.LVL38:
+  83:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC); 
+ 324              		.loc 1 83 13 is_stmt 1
+  83:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC); 
+ 325              		.loc 1 83 29 is_stmt 0
+ 326 0150 93070068 		li	a5,1664
+ 327 0154 3385A740 		sub	a0,a5,a0
+ 328              	.LVL39:
+  83:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC); 
+ 329              		.loc 1 83 35
+ 330 0158 9545     		li	a1,5
+ 331 015a B345B502 		div	a1,a0,a1
+  83:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC); 
+ 332              		.loc 1 83 13
+ 333 015e 1D45     		li	a0,7
+ 334 0160 E505     		addi	a1,a1,25
+ 335 0162 97000000 		call	l88mem
+ 335      E7800000 
+ 336              	.LVL40:
+  84:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOIC); 
+ 337              		.loc 1 84 13 is_stmt 1
+ 338 016a 8945     		li	a1,2
+ 339 016c 5685     		mv	a0,s5
+ 340 016e 97000000 		call	adc_flag_clear
+ 340      E7800000 
+ 341              	.LVL41:
+  85:main.c        ****           }
+ 342              		.loc 1 85 13
+ 343 0176 9145     		li	a1,4
+ 344              	.L44:
+  93:main.c        ****           }
+ 345              		.loc 1 93 13 is_stmt 0
+ 346 0178 5685     		mv	a0,s5
+ 347 017a 97000000 		call	adc_flag_clear
+ 347      E7800000 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 12
+
+
+ 348              	.LVL42:
+ 349              	.L5:
+  99:main.c        ****         {
+ 350              		.loc 1 99 9 is_stmt 1
+  99:main.c        ****         {
+ 351              		.loc 1 99 13 is_stmt 0
+ 352 0182 5245     		lw	a0,20(sp)
+ 353 0184 9545     		li	a1,5
+ 354 0186 97000000 		call	usart_flag_get
+ 354      E7800000 
+ 355              	.LVL43:
+  99:main.c        ****         {
+ 356              		.loc 1 99 12
+ 357 018e 09CD     		beq	a0,zero,.L7
+ 101:main.c        ****           l88mem(6, rx);                                // Display on 8x8 LED row 6
+ 358              		.loc 1 101 11 is_stmt 1
+ 101:main.c        ****           l88mem(6, rx);                                // Display on 8x8 LED row 6
+ 359              		.loc 1 101 22 is_stmt 0
+ 360 0190 5245     		lw	a0,20(sp)
+ 361 0192 97000000 		call	usart_data_receive
+ 361      E7800000 
+ 362              	.LVL44:
+ 102:main.c        ****         }
+ 363              		.loc 1 102 11 is_stmt 1
+ 364 019a 9375F50F 		andi	a1,a0,0xff
+ 365 019e 1945     		li	a0,6
+ 366              	.LVL45:
+ 367 01a0 97000000 		call	l88mem
+ 367      E7800000 
+ 368              	.LVL46:
+ 369              	.L7:
+ 105:main.c        ****         {                     // Manage periodic tasks
+ 370              		.loc 1 105 9
+ 105:main.c        ****         {                     // Manage periodic tasks
+ 371              		.loc 1 105 13 is_stmt 0
+ 372 01a8 97000000 		call	t5expq
+ 372      E7800000 
+ 373              	.LVL47:
+ 105:main.c        ****         {                     // Manage periodic tasks
+ 374              		.loc 1 105 12
+ 375 01b0 39DD     		beq	a0,zero,.L8
+ 107:main.c        ****             ms++;                           // ...One second heart beat
+ 376              		.loc 1 107 13 is_stmt 1
+ 377 01b2 97000000 		call	colset
+ 377      E7800000 
+ 378              	.LVL48:
+ 379 01ba 97000000 		call	l88row
+ 379      E7800000 
+ 380              	.LVL49:
+ 108:main.c        ****             if (ms==1000)
+ 381              		.loc 1 108 13
+ 108:main.c        ****             if (ms==1000)
+ 382              		.loc 1 108 15 is_stmt 0
+ 383 01c2 9247     		lw	a5,4(sp)
+ 109:main.c        ****             {
+ 384              		.loc 1 109 16
+ 385 01c4 1307803E 		li	a4,1000
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 13
+
+
+ 108:main.c        ****             if (ms==1000)
+ 386              		.loc 1 108 15
+ 387 01c8 8507     		addi	a5,a5,1
+ 388 01ca 3EC2     		sw	a5,4(sp)
+ 389              	.LVL50:
+ 109:main.c        ****             {
+ 390              		.loc 1 109 13 is_stmt 1
+ 109:main.c        ****             {
+ 391              		.loc 1 109 16 is_stmt 0
+ 392 01cc 639EE700 		bne	a5,a4,.L9
+ 111:main.c        ****               l88mem(0,s++);
+ 393              		.loc 1 111 15 is_stmt 1
+ 394              	.LVL51:
+ 112:main.c        ****             }
+ 395              		.loc 1 112 15
+ 396 01d0 A247     		lw	a5,8(sp)
+ 397 01d2 A245     		lw	a1,8(sp)
+ 398 01d4 0145     		li	a0,0
+ 399 01d6 8507     		addi	a5,a5,1
+ 400 01d8 3EC2     		sw	a5,4(sp)
+ 401              	.LVL52:
+ 402 01da 97000000 		call	l88mem
+ 402      E7800000 
+ 403              	.LVL53:
+ 404 01e2 9247     		lw	a5,4(sp)
+ 111:main.c        ****               l88mem(0,s++);
+ 405              		.loc 1 111 17 is_stmt 0
+ 406 01e4 02C2     		sw	zero,4(sp)
+ 407              	.LVL54:
+ 112:main.c        ****             }
+ 408              		.loc 1 112 15
+ 409 01e6 3EC4     		sw	a5,8(sp)
+ 410              	.LVL55:
+ 411              	.L9:
+ 116:main.c        ****               stepMs = 0;
+ 412              		.loc 1 116 13 is_stmt 1
+ 116:main.c        ****               stepMs = 0;
+ 413              		.loc 1 116 16 is_stmt 0
+ 414 01e8 63070904 		beq	s2,zero,.L10
+ 116:main.c        ****               stepMs = 0;
+ 415              		.loc 1 116 31 discriminator 1
+ 416 01ec 850B     		addi	s7,s7,1
+ 417              	.LVL56:
+ 418 01ee 93073006 		li	a5,99
+ 419 01f2 63D27705 		ble	s7,a5,.L10
+ 117:main.c        ****               if      (drawDir==2) curY--;  // up
+ 420              		.loc 1 117 15 is_stmt 1
+ 421              	.LVL57:
+ 118:main.c        ****               else if (drawDir==4) curX--;  // left
+ 422              		.loc 1 118 15
+ 118:main.c        ****               else if (drawDir==4) curX--;  // left
+ 423              		.loc 1 118 23 is_stmt 0
+ 424 01f6 8947     		li	a5,2
+ 425 01f8 631CFA0E 		bne	s4,a5,.L11
+ 118:main.c        ****               else if (drawDir==4) curX--;  // left
+ 426              		.loc 1 118 36 is_stmt 1 discriminator 1
+ 118:main.c        ****               else if (drawDir==4) curX--;  // left
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 14
+
+
+ 427              		.loc 1 118 40 is_stmt 0 discriminator 1
+ 428 01fc 7D1D     		addi	s10,s10,-1
+ 429              	.LVL58:
+ 430              	.L12:
+ 122:main.c        ****               
+ 431              		.loc 1 122 15 is_stmt 1
+ 432 01fe 6246     		lw	a2,24(sp)
+ 433 0200 EA85     		mv	a1,s10
+ 434 0202 6685     		mv	a0,s9
+ 124:main.c        **** 
+ 435              		.loc 1 124 18 is_stmt 0
+ 436 0204 7D19     		addi	s2,s2,-1
+ 437              	.LVL59:
+ 122:main.c        ****               
+ 438              		.loc 1 122 15
+ 439 0206 97000000 		call	LCD_DrawPoint
+ 439      E7800000 
+ 440              	.LVL60:
+ 124:main.c        **** 
+ 441              		.loc 1 124 15 is_stmt 1
+ 117:main.c        ****               if      (drawDir==2) curY--;  // up
+ 442              		.loc 1 117 22 is_stmt 0
+ 443 020e 814B     		li	s7,0
+ 124:main.c        **** 
+ 444              		.loc 1 124 18
+ 445 0210 63130902 		bne	s2,zero,.L10
+ 124:main.c        **** 
+ 446              		.loc 1 124 36 discriminator 1
+ 447 0214 6DCC     		beq	s0,zero,.L23
+ 127:main.c        ****                 {
+ 448              		.loc 1 127 17 is_stmt 1
+ 127:main.c        ****                 {
+ 449              		.loc 1 127 20 is_stmt 0
+ 450 0216 635F6C0F 		ble	s6,s8,.L24
+ 451              	.LBB8:
+ 129:main.c        ****                   drawDir = (cmd>>4) & 0x0F;
+ 452              		.loc 1 129 19 is_stmt 1
+ 453              	.LVL61:
+ 129:main.c        ****                   drawDir = (cmd>>4) & 0x0F;
+ 454              		.loc 1 129 23 is_stmt 0
+ 455 021a 93172C00 		slli	a5,s8,2
+ 456 021e 1801     		addi	a4,sp,128
+ 457 0220 BA97     		add	a5,a4,a5
+ 458 0222 83A747FA 		lw	a5,-92(a5)
+ 459              	.LVL62:
+ 130:main.c        ****                   drawSteps = cmd & 0x0F;
+ 460              		.loc 1 130 19 is_stmt 1
+ 461              	.LBE8:
+ 117:main.c        ****               if      (drawDir==2) curY--;  // up
+ 462              		.loc 1 117 22 is_stmt 0
+ 463 0226 CA8B     		mv	s7,s2
+ 464              	.LBB9:
+ 129:main.c        ****                   drawDir = (cmd>>4) & 0x0F;
+ 465              		.loc 1 129 45
+ 466 0228 050C     		addi	s8,s8,1
+ 467              	.LVL63:
+ 130:main.c        ****                   drawSteps = cmd & 0x0F;
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 15
+
+
+ 468              		.loc 1 130 33
+ 469 022a 13DA4740 		srai	s4,a5,4
+ 470              	.LVL64:
+ 130:main.c        ****                   drawSteps = cmd & 0x0F;
+ 471              		.loc 1 130 27
+ 472 022e 137AFA00 		andi	s4,s4,15
+ 473              	.LVL65:
+ 131:main.c        ****                 } 
+ 474              		.loc 1 131 19 is_stmt 1
+ 131:main.c        ****                 } 
+ 475              		.loc 1 131 29 is_stmt 0
+ 476 0232 13F9F700 		andi	s2,a5,15
+ 477              	.LVL66:
+ 478              	.L10:
+ 479              	.LBE9:
+ 140:main.c        ****             {
+ 480              		.loc 1 140 13 is_stmt 1
+ 140:main.c        ****             {
+ 481              		.loc 1 140 22 is_stmt 0
+ 482 0236 97000000 		call	keyscan
+ 482      E7800000 
+ 483              	.LVL67:
+ 484 023e 2A87     		mv	a4,a0
+ 485              	.LVL68:
+ 140:main.c        ****             {
+ 486              		.loc 1 140 16
+ 487 0240 634F0510 		blt	a0,zero,.L25
+ 143:main.c        ****               
+ 488              		.loc 1 143 15 is_stmt 1
+ 143:main.c        ****               
+ 489              		.loc 1 143 18 is_stmt 0
+ 490 0244 C247     		lw	a5,16(sp)
+ 143:main.c        ****               
+ 491              		.loc 1 143 31
+ 492 0246 8509     		addi	s3,s3,1
+ 493              	.LVL69:
+ 143:main.c        ****               
+ 494              		.loc 1 143 18
+ 495 0248 6303F500 		beq	a0,a5,.L16
+ 145:main.c        **** 
+ 496              		.loc 1 145 22
+ 497 024c 8149     		li	s3,0
+ 498              	.LVL70:
+ 499              	.L16:
+ 147:main.c        **** 
+ 500              		.loc 1 147 15 is_stmt 1
+ 147:main.c        **** 
+ 501              		.loc 1 147 33 is_stmt 0
+ 502 024e 93172700 		slli	a5,a4,2
+ 503 0252 3ACE     		sw	a4,28(sp)
+ 504 0254 1801     		addi	a4,sp,128
+ 505 0256 BA97     		add	a5,a4,a5
+ 506 0258 83A707FC 		lw	a5,-64(a5)
+ 147:main.c        **** 
+ 507              		.loc 1 147 41
+ 508 025c 93954900 		slli	a1,s3,4
+ 147:main.c        **** 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 16
+
+
+ 509              		.loc 1 147 15
+ 510 0260 0545     		li	a0,1
+ 511              	.LVL71:
+ 512 0262 BE95     		add	a1,a1,a5
+ 513 0264 3EC8     		sw	a5,16(sp)
+ 514 0266 97000000 		call	l88mem
+ 514      E7800000 
+ 515              	.LVL72:
+ 149:main.c        ****               {   
+ 516              		.loc 1 149 15 is_stmt 1
+ 149:main.c        ****               {   
+ 517              		.loc 1 149 18 is_stmt 0
+ 518 026e 7247     		lw	a4,28(sp)
+ 519 0270 63950902 		bne	s3,zero,.L15
+ 520              	.LVL73:
+ 521              	.LBB10:
+ 152:main.c        **** 
+ 522              		.loc 1 152 17 is_stmt 1
+ 154:main.c        ****                 
+ 523              		.loc 1 154 17
+ 154:main.c        ****                 
+ 524              		.loc 1 154 20 is_stmt 0
+ 525 0274 C247     		lw	a5,16(sp)
+ 526 0276 B546     		li	a3,13
+ 527 0278 6393D70A 		bne	a5,a3,.L17
+ 154:main.c        ****                 
+ 528              		.loc 1 154 34 discriminator 1
+ 529 027c 63900410 		bne	s1,zero,.L18
+ 158:main.c        ****                   {
+ 530              		.loc 1 158 19 is_stmt 1
+ 158:main.c        ****                   {
+ 531              		.loc 1 158 22 is_stmt 0
+ 532 0280 63020B0E 		beq	s6,zero,.L27
+ 533              	.LBB11:
+ 160:main.c        ****                     int cmd = cmdBuf[cmdBufIdx++];
+ 534              		.loc 1 160 21 is_stmt 1
+ 535              	.LVL74:
+ 160:main.c        ****                     int cmd = cmdBuf[cmdBufIdx++];
+ 536              		.loc 1 160 36
+ 161:main.c        ****                     drawDir=(cmd>>4)&0x0F; drawSteps=cmd&0x0F; stepMs=0;
+ 537              		.loc 1 161 21
+ 161:main.c        ****                     drawDir=(cmd>>4)&0x0F; drawSteps=cmd&0x0F; stepMs=0;
+ 538              		.loc 1 161 25 is_stmt 0
+ 539 0284 1259     		lw	s2,36(sp)
+ 540              	.LVL75:
+ 162:main.c        ****                   }
+ 541              		.loc 1 162 21 is_stmt 1
+ 162:main.c        ****                   }
+ 542              		.loc 1 162 70 is_stmt 0
+ 543 0286 814B     		li	s7,0
+ 544              	.LVL76:
+ 162:main.c        ****                   }
+ 545              		.loc 1 162 53
+ 546 0288 A689     		mv	s3,s1
+ 162:main.c        ****                   }
+ 547              		.loc 1 162 33
+ 548 028a 135A4940 		srai	s4,s2,4
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 17
+
+
+ 549              	.LVL77:
+ 162:main.c        ****                   }
+ 550              		.loc 1 162 28
+ 551 028e 137AFA00 		andi	s4,s4,15
+ 552              	.LVL78:
+ 162:main.c        ****                   }
+ 553              		.loc 1 162 44 is_stmt 1
+ 162:main.c        ****                   }
+ 554              		.loc 1 162 53 is_stmt 0
+ 555 0292 1379F900 		andi	s2,s2,15
+ 556              	.LVL79:
+ 162:main.c        ****                   }
+ 557              		.loc 1 162 64 is_stmt 1
+ 160:main.c        ****                     int cmd = cmdBuf[cmdBufIdx++];
+ 558              		.loc 1 160 44 is_stmt 0
+ 559 0296 0544     		li	s0,1
+ 161:main.c        ****                     drawDir=(cmd>>4)&0x0F; drawSteps=cmd&0x0F; stepMs=0;
+ 560              		.loc 1 161 47
+ 561 0298 054C     		li	s8,1
+ 562              	.LVL80:
+ 563              	.L15:
+ 564              	.LBE11:
+ 565              	.LBE10:
+ 198:main.c        ****             l88mem(3,idle); idle=0;
+ 566              		.loc 1 198 13
+ 567 029a 93D58D40 		srai	a1,s11,8
+ 568 029e 0945     		li	a0,2
+ 569 02a0 3AC8     		sw	a4,16(sp)
+ 570              	.LVL81:
+ 198:main.c        ****             l88mem(3,idle); idle=0;
+ 571              		.loc 1 198 13 is_stmt 1
+ 572 02a2 97000000 		call	l88mem
+ 572      E7800000 
+ 573              	.LVL82:
+ 199:main.c        ****             adc_software_trigger_enable(ADC0, //Trigger another ADC conversion!
+ 574              		.loc 1 199 13
+ 575 02aa EE85     		mv	a1,s11
+ 576 02ac 0D45     		li	a0,3
+ 577 02ae 97000000 		call	l88mem
+ 577      E7800000 
+ 578              	.LVL83:
+ 199:main.c        ****             adc_software_trigger_enable(ADC0, //Trigger another ADC conversion!
+ 579              		.loc 1 199 29
+ 580              		.loc 1 200 13
+ 581 02b6 8545     		li	a1,1
+ 582 02b8 5685     		mv	a0,s5
+ 583 02ba 97000000 		call	adc_software_trigger_enable
+ 583      E7800000 
+ 584              	.LVL84:
+ 585 02c2 A9B5     		j	.L20
+ 586              	.LVL85:
+ 587              	.L6:
+  90:main.c        ****             l88mem(4,adcr>>8);                  // ......move data
+ 588              		.loc 1 90 13
+  90:main.c        ****             l88mem(4,adcr>>8);                  // ......move data
+ 589              		.loc 1 90 20 is_stmt 0
+ 590 02c4 5685     		mv	a0,s5
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 18
+
+
+ 591 02c6 97000000 		call	adc_regular_data_read
+ 591      E7800000 
+ 592              	.LVL86:
+  91:main.c        ****             l88mem(5,adcr);                     // ......(view each ms)
+ 593              		.loc 1 91 13 is_stmt 1
+ 594 02ce 93558540 		srai	a1,a0,8
+ 595 02d2 2ACE     		sw	a0,28(sp)
+ 596 02d4 1145     		li	a0,4
+ 597              	.LVL87:
+ 598 02d6 97000000 		call	l88mem
+ 598      E7800000 
+ 599              	.LVL88:
+  92:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC); // ......clear IF
+ 600              		.loc 1 92 13
+ 601 02de F247     		lw	a5,28(sp)
+ 602 02e0 1545     		li	a0,5
+ 603 02e2 BE85     		mv	a1,a5
+ 604 02e4 97000000 		call	l88mem
+ 604      E7800000 
+ 605              	.LVL89:
+  93:main.c        ****           }
+ 606              		.loc 1 93 13
+ 607 02ec 8945     		li	a1,2
+ 608 02ee 69B5     		j	.L44
+ 609              	.LVL90:
+ 610              	.L11:
+ 119:main.c        ****               else if (drawDir==6) curX++;  // right
+ 611              		.loc 1 119 20
+ 119:main.c        ****               else if (drawDir==6) curX++;  // right
+ 612              		.loc 1 119 23 is_stmt 0
+ 613 02f0 9147     		li	a5,4
+ 614 02f2 6314FA00 		bne	s4,a5,.L13
+ 119:main.c        ****               else if (drawDir==6) curX++;  // right
+ 615              		.loc 1 119 36 is_stmt 1 discriminator 1
+ 119:main.c        ****               else if (drawDir==6) curX++;  // right
+ 616              		.loc 1 119 40 is_stmt 0 discriminator 1
+ 617 02f6 FD1C     		addi	s9,s9,-1
+ 618              	.LVL91:
+ 619 02f8 19B7     		j	.L12
+ 620              	.L13:
+ 120:main.c        ****               else if (drawDir==8) curY++;  // down
+ 621              		.loc 1 120 20 is_stmt 1
+ 120:main.c        ****               else if (drawDir==8) curY++;  // down
+ 622              		.loc 1 120 23 is_stmt 0
+ 623 02fa 9947     		li	a5,6
+ 624 02fc 6314FA00 		bne	s4,a5,.L14
+ 120:main.c        ****               else if (drawDir==8) curY++;  // down
+ 625              		.loc 1 120 36 is_stmt 1 discriminator 1
+ 120:main.c        ****               else if (drawDir==8) curY++;  // down
+ 626              		.loc 1 120 40 is_stmt 0 discriminator 1
+ 627 0300 850C     		addi	s9,s9,1
+ 628              	.LVL92:
+ 629 0302 F5BD     		j	.L12
+ 630              	.L14:
+ 121:main.c        ****               LCD_DrawPoint(curX, curY, WHITE);
+ 631              		.loc 1 121 20 is_stmt 1
+ 121:main.c        ****               LCD_DrawPoint(curX, curY, WHITE);
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 19
+
+
+ 632              		.loc 1 121 23 is_stmt 0
+ 633 0304 A147     		li	a5,8
+ 634 0306 E31CFAEE 		bne	s4,a5,.L12
+ 121:main.c        ****               LCD_DrawPoint(curX, curY, WHITE);
+ 635              		.loc 1 121 36 is_stmt 1 discriminator 1
+ 121:main.c        ****               LCD_DrawPoint(curX, curY, WHITE);
+ 636              		.loc 1 121 40 is_stmt 0 discriminator 1
+ 637 030a 050D     		addi	s10,s10,1
+ 638              	.LVL93:
+ 639 030c CDBD     		j	.L12
+ 640              	.L23:
+ 117:main.c        ****               if      (drawDir==2) curY--;  // up
+ 641              		.loc 1 117 22
+ 642 030e A28B     		mv	s7,s0
+ 124:main.c        **** 
+ 643              		.loc 1 124 18
+ 644 0310 2289     		mv	s2,s0
+ 645              	.LVL94:
+ 646 0312 15B7     		j	.L10
+ 647              	.LVL95:
+ 648              	.L24:
+ 135:main.c        ****               }
+ 649              		.loc 1 135 26
+ 650 0314 0144     		li	s0,0
+ 651              	.LVL96:
+ 135:main.c        ****               }
+ 652              		.loc 1 135 52
+ 653 0316 014C     		li	s8,0
+ 654              	.LVL97:
+ 135:main.c        ****               }
+ 655              		.loc 1 135 39
+ 656 0318 014B     		li	s6,0
+ 657              	.LVL98:
+ 117:main.c        ****               if      (drawDir==2) curY--;  // up
+ 658              		.loc 1 117 22
+ 659 031a CA8B     		mv	s7,s2
+ 660 031c 29BF     		j	.L10
+ 661              	.LVL99:
+ 662              	.L17:
+ 663              	.LBB16:
+ 167:main.c        ****                 {
+ 664              		.loc 1 167 22 is_stmt 1
+ 167:main.c        ****                 {
+ 665              		.loc 1 167 25 is_stmt 0
+ 666 031e 35FC     		bne	s0,zero,.L15
+ 169:main.c        ****                   {
+ 667              		.loc 1 169 19 is_stmt 1
+ 169:main.c        ****                   {
+ 668              		.loc 1 169 22 is_stmt 0
+ 669 0320 A9C4     		beq	s1,zero,.L28
+ 670              	.LVL100:
+ 671              	.L21:
+ 179:main.c        **** 
+ 672              		.loc 1 179 21 is_stmt 1
+ 179:main.c        **** 
+ 673              		.loc 1 179 42 is_stmt 0
+ 674 0322 B246     		lw	a3,12(sp)
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 20
+
+
+ 675              	.LBB12:
+ 183:main.c        ****                         cmdBuf[cmdBufLen++] = txByte;  // store, do not execute yet
+ 676              		.loc 1 183 26
+ 677 0324 0946     		li	a2,2
+ 678              	.LBE12:
+ 179:main.c        **** 
+ 679              		.loc 1 179 42
+ 680 0326 9206     		slli	a3,a3,4
+ 179:main.c        **** 
+ 681              		.loc 1 179 28
+ 682 0328 DD8E     		or	a3,a3,a5
+ 683              	.LVL101:
+ 684              	.LBB13:
+ 181:main.c        **** 
+ 685              		.loc 1 181 23 is_stmt 1
+ 181:main.c        **** 
+ 686              		.loc 1 181 39 is_stmt 0
+ 687 032a 93D74640 		srai	a5,a3,4
+ 688              	.LVL102:
+ 183:main.c        ****                         cmdBuf[cmdBufLen++] = txByte;  // store, do not execute yet
+ 689              		.loc 1 183 23 is_stmt 1
+ 183:main.c        ****                         cmdBuf[cmdBufLen++] = txByte;  // store, do not execute yet
+ 690              		.loc 1 183 26 is_stmt 0
+ 691 032e 93F5B700 		andi	a1,a5,11
+ 692 0332 6386C500 		beq	a1,a2,.L19
+ 181:main.c        **** 
+ 693              		.loc 1 181 27 discriminator 2
+ 694 0336 BD8B     		andi	a5,a5,15
+ 695              	.LVL103:
+ 183:main.c        ****                         cmdBuf[cmdBufLen++] = txByte;  // store, do not execute yet
+ 696              		.loc 1 183 33 discriminator 2
+ 697 0338 F117     		addi	a5,a5,-4
+ 698              	.LVL104:
+ 699 033a ED9B     		andi	a5,a5,-5
+ 700              	.LVL105:
+ 701 033c 95EF     		bne	a5,zero,.L31
+ 702              	.L19:
+ 183:main.c        ****                         cmdBuf[cmdBufLen++] = txByte;  // store, do not execute yet
+ 703              		.loc 1 183 66 discriminator 7
+ 704 033e 93F4F600 		andi	s1,a3,15
+ 183:main.c        ****                         cmdBuf[cmdBufLen++] = txByte;  // store, do not execute yet
+ 705              		.loc 1 183 56 discriminator 7
+ 706 0342 8DC8     		beq	s1,zero,.L30
+ 183:main.c        ****                         cmdBuf[cmdBufLen++] = txByte;  // store, do not execute yet
+ 707              		.loc 1 183 76 discriminator 8
+ 708 0344 9947     		li	a5,6
+ 709 0346 63C96703 		bgt	s6,a5,.L31
+ 184:main.c        ****                     }
+ 710              		.loc 1 184 25 is_stmt 1
+ 711              	.LVL106:
+ 184:main.c        ****                     }
+ 712              		.loc 1 184 45 is_stmt 0
+ 713 034a 93172B00 		slli	a5,s6,2
+ 714 034e 1001     		addi	a2,sp,128
+ 715 0350 B297     		add	a5,a2,a5
+ 716 0352 23A2D7FA 		sw	a3,-92(a5)
+ 717 0356 0144     		li	s0,0
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 21
+
+
+ 718              	.LVL107:
+ 184:main.c        ****                     }
+ 719              		.loc 1 184 41
+ 720 0358 050B     		addi	s6,s6,1
+ 721              	.LVL108:
+ 722              	.L45:
+ 723              	.LBE13:
+ 186:main.c        ****                   }
+ 724              		.loc 1 186 30
+ 725 035a 8144     		li	s1,0
+ 726 035c 3DBF     		j	.L15
+ 727              	.LVL109:
+ 728              	.L25:
+ 729              	.LBE16:
+ 196:main.c        ****             }
+ 730              		.loc 1 196 17
+ 731 035e 8149     		li	s3,0
+ 732              	.LVL110:
+ 195:main.c        ****               c = 0;
+ 733              		.loc 1 195 20
+ 734 0360 7D57     		li	a4,-1
+ 735 0362 25BF     		j	.L15
+ 736              	.LVL111:
+ 737              	.L27:
+ 738              	.LBB17:
+ 739 0364 DA84     		mv	s1,s6
+ 740              	.LVL112:
+ 741              	.L46:
+ 742              	.LBB14:
+ 743 0366 8149     		li	s3,0
+ 744 0368 0DBF     		j	.L15
+ 745              	.LVL113:
+ 746              	.L28:
+ 747              	.LBE14:
+ 748 036a 2684     		mv	s0,s1
+ 749              	.LVL114:
+ 750 036c A689     		mv	s3,s1
+ 751 036e 3EC6     		sw	a5,12(sp)
+ 752              	.LVL115:
+ 173:main.c        ****                   } 
+ 753              		.loc 1 173 30
+ 754 0370 8544     		li	s1,1
+ 755              	.LVL116:
+ 756 0372 25B7     		j	.L15
+ 757              	.LVL117:
+ 758              	.L30:
+ 759              	.LBB15:
+ 760 0374 0144     		li	s0,0
+ 761              	.LVL118:
+ 762 0376 C5BF     		j	.L46
+ 763              	.LVL119:
+ 764              	.L31:
+ 765 0378 0144     		li	s0,0
+ 766              	.LVL120:
+ 767 037a C5B7     		j	.L45
+ 768              	.LVL121:
+ 769              	.L18:
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 22
+
+
+ 770              	.LBE15:
+ 167:main.c        ****                 {
+ 771              		.loc 1 167 22 is_stmt 1
+ 167:main.c        ****                 {
+ 772              		.loc 1 167 25 is_stmt 0
+ 773 037c A284     		mv	s1,s0
+ 774              	.LVL122:
+ 775 037e 55D0     		beq	s0,zero,.L21
+ 776 0380 29BF     		j	.L15
+ 777              	.LBE17:
+ 778              		.cfi_endproc
+ 779              	.LFE3:
+ 781              		.section	.rodata
+ 782              		.align	2
+ 783              		.set	.LANCHOR0,. + 0
+ 784              	.LC0:
+ 785 0000 01000000 		.word	1
+ 786 0004 04000000 		.word	4
+ 787 0008 07000000 		.word	7
+ 788 000c 0E000000 		.word	14
+ 789 0010 02000000 		.word	2
+ 790 0014 05000000 		.word	5
+ 791 0018 08000000 		.word	8
+ 792 001c 00000000 		.word	0
+ 793 0020 03000000 		.word	3
+ 794 0024 06000000 		.word	6
+ 795 0028 09000000 		.word	9
+ 796 002c 0F000000 		.word	15
+ 797 0030 0A000000 		.word	10
+ 798 0034 0B000000 		.word	11
+ 799 0038 0C000000 		.word	12
+ 800 003c 0D000000 		.word	13
+ 801              		.section	.rodata.main.str1.4,"aMS",@progbits,1
+ 802              		.align	2
+ 803              	.LC1:
+ 804 0000 4C616220 		.string	"Lab #5"
+ 804      233500
+ 805              		.text
+ 806              	.Letext0:
+ 807              		.file 2 "c:\\kth\\digtal_teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 808              		.file 3 "c:\\kth\\digtal_teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 809              		.file 4 "./../../firmware/GD32VF103_standard_peripheral/gd32vf103.h"
+ 810              		.file 5 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_rcu.h"
+ 811              		.file 6 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_usart.h"
+ 812              		.file 7 "c:\\kth\\digtal_teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\lib\\gcc\\riscv64-unkn
+ 813              		.file 8 "c:\\kth\\digtal_teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 814              		.file 9 "c:\\kth\\digtal_teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 815              		.file 10 "c:\\kth\\digtal_teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\
+ 816              		.file 11 "./../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+ 817              		.file 12 "c:\\kth\\digtal_teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\
+ 818              		.file 13 "lcd.h"
+ 819              		.file 14 "drivers.h"
+ 820              		.file 15 "adc.h"
+ 821              		.file 16 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_rtc.h"
+ 822              		.file 17 "usart.h"
+ 823              		.file 18 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_eclic.h"
+ 824              		.file 19 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_adc.h"
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 23
+
+
+ 825              		.file 20 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_pmu.h"
+ 826              		.file 21 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_bkp.h"
+ 827              		.file 22 "<built-in>"
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 24
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:13     .text.rtcInit:0000000000000000 rtcInit
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:17     .text.rtcInit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:18     .text.rtcInit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:19     .text.rtcInit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:20     .text.rtcInit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:22     .text.rtcInit:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:24     .text.rtcInit:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:26     .text.rtcInit:0000000000000006 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:28     .text.rtcInit:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:29     .text.rtcInit:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:31     .text.rtcInit:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:34     .text.rtcInit:0000000000000012 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:37     .text.rtcInit:000000000000001a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:41     .text.rtcInit:0000000000000026 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:44     .text.rtcInit:000000000000002e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:48     .text.rtcInit:0000000000000038 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:49     .text.rtcInit:0000000000000038 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:54     .text.rtcInit:0000000000000046 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:58     .text.rtcInit:0000000000000048 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:62     .text.rtcInit:0000000000000054 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:66     .text.rtcInit:0000000000000060 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:69     .text.rtcInit:0000000000000068 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:72     .text.rtcInit:0000000000000070 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:77     .text.rtcInit:000000000000007c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:80     .text.rtcInit:0000000000000084 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:84     .text.rtcInit:000000000000008e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:90     .text.rtcInit:0000000000000098 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:91     .text.rtcInit:0000000000000098 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:92     .text.rtcInit:000000000000009a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:93     .text.rtcInit:000000000000009a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:95     .text.rtcInit:000000000000009c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:98     .text.rtcInit:000000000000009e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:102    .text.rtcInit:000000000000009e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:106    .text.rtcInit:00000000000000a6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:110    .text.rtcInit:00000000000000a6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:111    .text.rtcInit:00000000000000a8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:113    .text.rtcInit:00000000000000aa .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:116    .text.rtcInit:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:118    .text.rtcInit:00000000000000ae .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:125    .text.startup.main:0000000000000000 main
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:128    .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:129    .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:131    .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:132    .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:133    .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:135    .text.startup.main:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:137    .text.startup.main:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:142    .text.startup.main:0000000000000010 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:155    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:156    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:157    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:158    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:159    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:160    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:161    .text.startup.main:000000000000002a .L0 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 25
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:162    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:163    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:164    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:165    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:166    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:167    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:169    .text.startup.main:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:172    .text.startup.main:0000000000000032 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:173    .text.startup.main:0000000000000032 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:174    .text.startup.main:0000000000000032 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:175    .text.startup.main:0000000000000032 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:176    .text.startup.main:0000000000000032 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:177    .text.startup.main:0000000000000032 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:178    .text.startup.main:0000000000000032 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:179    .text.startup.main:0000000000000032 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:182    .text.startup.main:000000000000003a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:185    .text.startup.main:0000000000000042 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:188    .text.startup.main:000000000000004a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:191    .text.startup.main:0000000000000052 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:195    .text.startup.main:000000000000005c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:199    .text.startup.main:0000000000000066 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:200    .text.startup.main:0000000000000066 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:202    .text.startup.main:0000000000000068 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:205    .text.startup.main:0000000000000070 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:209    .text.startup.main:000000000000007c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:218    .text.startup.main:0000000000000096 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:221    .text.startup.main:000000000000009e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:226    .text.startup.main:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:230    .text.startup.main:00000000000000b6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:236    .text.startup.main:00000000000000ca .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:239    .text.startup.main:00000000000000d2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:242    .text.startup.main:00000000000000d6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:245    .text.startup.main:00000000000000de .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:247    .text.startup.main:00000000000000e2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:249    .text.startup.main:00000000000000e4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:251    .text.startup.main:00000000000000e8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:253    .text.startup.main:00000000000000ea .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:255    .text.startup.main:00000000000000ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:257    .text.startup.main:00000000000000ee .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:259    .text.startup.main:00000000000000f0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:261    .text.startup.main:00000000000000f2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:263    .text.startup.main:00000000000000f4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:265    .text.startup.main:00000000000000f8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:267    .text.startup.main:00000000000000fc .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:269    .text.startup.main:00000000000000fe .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:271    .text.startup.main:0000000000000100 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:273    .text.startup.main:0000000000000102 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:275    .text.startup.main:0000000000000104 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:277    .text.startup.main:0000000000000106 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:279    .text.startup.main:000000000000010a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:283    .text.startup.main:000000000000010c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:287    .text.startup.main:000000000000010e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:288    .text.startup.main:000000000000010e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:289    .text.startup.main:000000000000010e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:292    .text.startup.main:0000000000000116 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:295    .text.startup.main:000000000000011e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:300    .text.startup.main:000000000000012a .L0 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 26
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:302    .text.startup.main:000000000000012c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:305    .text.startup.main:000000000000012e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:306    .text.startup.main:000000000000012e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:307    .text.startup.main:000000000000012e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:308    .text.startup.main:000000000000012e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:310    .text.startup.main:0000000000000132 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:311    .text.startup.main:0000000000000132 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:316    .text.startup.main:000000000000013e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:319    .text.startup.main:0000000000000144 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:320    .text.startup.main:0000000000000144 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:325    .text.startup.main:0000000000000150 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:326    .text.startup.main:0000000000000150 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:330    .text.startup.main:0000000000000158 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:333    .text.startup.main:000000000000015e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:338    .text.startup.main:000000000000016a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:343    .text.startup.main:0000000000000176 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:346    .text.startup.main:0000000000000178 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:351    .text.startup.main:0000000000000182 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:352    .text.startup.main:0000000000000182 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:357    .text.startup.main:000000000000018e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:359    .text.startup.main:0000000000000190 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:360    .text.startup.main:0000000000000190 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:364    .text.startup.main:000000000000019a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:371    .text.startup.main:00000000000001a8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:372    .text.startup.main:00000000000001a8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:375    .text.startup.main:00000000000001b0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:377    .text.startup.main:00000000000001b2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:382    .text.startup.main:00000000000001c2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:383    .text.startup.main:00000000000001c2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:385    .text.startup.main:00000000000001c4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:387    .text.startup.main:00000000000001c8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:391    .text.startup.main:00000000000001cc .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:392    .text.startup.main:00000000000001cc .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:395    .text.startup.main:00000000000001d0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:396    .text.startup.main:00000000000001d0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:406    .text.startup.main:00000000000001e4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:409    .text.startup.main:00000000000001e6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:413    .text.startup.main:00000000000001e8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:414    .text.startup.main:00000000000001e8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:416    .text.startup.main:00000000000001ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:422    .text.startup.main:00000000000001f6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:423    .text.startup.main:00000000000001f6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:424    .text.startup.main:00000000000001f6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:427    .text.startup.main:00000000000001fc .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:428    .text.startup.main:00000000000001fc .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:432    .text.startup.main:00000000000001fe .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:436    .text.startup.main:0000000000000204 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:439    .text.startup.main:0000000000000206 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:442    .text.startup.main:000000000000020e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:443    .text.startup.main:000000000000020e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:445    .text.startup.main:0000000000000210 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:447    .text.startup.main:0000000000000214 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:449    .text.startup.main:0000000000000216 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:450    .text.startup.main:0000000000000216 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:454    .text.startup.main:000000000000021a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:455    .text.startup.main:000000000000021a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:462    .text.startup.main:0000000000000226 .L0 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 27
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:463    .text.startup.main:0000000000000226 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:466    .text.startup.main:0000000000000228 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:469    .text.startup.main:000000000000022a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:472    .text.startup.main:000000000000022e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:475    .text.startup.main:0000000000000232 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:476    .text.startup.main:0000000000000232 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:481    .text.startup.main:0000000000000236 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:482    .text.startup.main:0000000000000236 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:487    .text.startup.main:0000000000000240 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:489    .text.startup.main:0000000000000244 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:490    .text.startup.main:0000000000000244 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:492    .text.startup.main:0000000000000246 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:495    .text.startup.main:0000000000000248 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:497    .text.startup.main:000000000000024c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:501    .text.startup.main:000000000000024e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:502    .text.startup.main:000000000000024e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:508    .text.startup.main:000000000000025c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:510    .text.startup.main:0000000000000260 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:517    .text.startup.main:000000000000026e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:518    .text.startup.main:000000000000026e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:523    .text.startup.main:0000000000000274 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:524    .text.startup.main:0000000000000274 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:525    .text.startup.main:0000000000000274 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:529    .text.startup.main:000000000000027c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:531    .text.startup.main:0000000000000280 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:532    .text.startup.main:0000000000000280 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:536    .text.startup.main:0000000000000284 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:537    .text.startup.main:0000000000000284 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:538    .text.startup.main:0000000000000284 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:539    .text.startup.main:0000000000000284 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:542    .text.startup.main:0000000000000286 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:543    .text.startup.main:0000000000000286 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:546    .text.startup.main:0000000000000288 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:548    .text.startup.main:000000000000028a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:551    .text.startup.main:000000000000028e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:554    .text.startup.main:0000000000000292 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:555    .text.startup.main:0000000000000292 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:558    .text.startup.main:0000000000000296 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:559    .text.startup.main:0000000000000296 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:561    .text.startup.main:0000000000000298 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:567    .text.startup.main:000000000000029a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:572    .text.startup.main:00000000000002a2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:575    .text.startup.main:00000000000002aa .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:580    .text.startup.main:00000000000002b6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:581    .text.startup.main:00000000000002b6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:589    .text.startup.main:00000000000002c4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:590    .text.startup.main:00000000000002c4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:594    .text.startup.main:00000000000002ce .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:601    .text.startup.main:00000000000002de .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:607    .text.startup.main:00000000000002ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:612    .text.startup.main:00000000000002f0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:613    .text.startup.main:00000000000002f0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:616    .text.startup.main:00000000000002f6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:617    .text.startup.main:00000000000002f6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:622    .text.startup.main:00000000000002fa .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:623    .text.startup.main:00000000000002fa .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:626    .text.startup.main:0000000000000300 .L0 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 28
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:627    .text.startup.main:0000000000000300 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:632    .text.startup.main:0000000000000304 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:633    .text.startup.main:0000000000000304 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:636    .text.startup.main:000000000000030a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:637    .text.startup.main:000000000000030a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:642    .text.startup.main:000000000000030e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:644    .text.startup.main:0000000000000310 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:650    .text.startup.main:0000000000000314 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:653    .text.startup.main:0000000000000316 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:656    .text.startup.main:0000000000000318 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:659    .text.startup.main:000000000000031a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:665    .text.startup.main:000000000000031e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:666    .text.startup.main:000000000000031e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:668    .text.startup.main:0000000000000320 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:669    .text.startup.main:0000000000000320 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:673    .text.startup.main:0000000000000322 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:674    .text.startup.main:0000000000000322 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:677    .text.startup.main:0000000000000324 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:680    .text.startup.main:0000000000000326 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:682    .text.startup.main:0000000000000328 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:686    .text.startup.main:000000000000032a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:687    .text.startup.main:000000000000032a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:690    .text.startup.main:000000000000032e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:691    .text.startup.main:000000000000032e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:694    .text.startup.main:0000000000000336 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:697    .text.startup.main:0000000000000338 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:704    .text.startup.main:000000000000033e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:706    .text.startup.main:0000000000000342 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:708    .text.startup.main:0000000000000344 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:712    .text.startup.main:000000000000034a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:713    .text.startup.main:000000000000034a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:720    .text.startup.main:0000000000000358 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:725    .text.startup.main:000000000000035a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:731    .text.startup.main:000000000000035e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:734    .text.startup.main:0000000000000360 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:754    .text.startup.main:0000000000000370 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:772    .text.startup.main:000000000000037c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:773    .text.startup.main:000000000000037c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:778    .text.startup.main:0000000000000382 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:783    .rodata:0000000000000000 .LANCHOR0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:121    .text.rtcInit:00000000000000ae .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:781    .text.startup.main:0000000000000382 .L0 
+                     .debug_frame:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:104    .text.rtcInit:00000000000000a6 .L1
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:803    .rodata.main.str1.4:0000000000000000 .LC1
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:349    .text.startup.main:0000000000000182 .L5
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:587    .text.startup.main:00000000000002c4 .L6
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:369    .text.startup.main:00000000000001a8 .L7
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:285    .text.startup.main:000000000000010e .L8
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:411    .text.startup.main:00000000000001e8 .L9
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:478    .text.startup.main:0000000000000236 .L10
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:610    .text.startup.main:00000000000002f0 .L11
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:640    .text.startup.main:000000000000030e .L23
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:648    .text.startup.main:0000000000000314 .L24
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:728    .text.startup.main:000000000000035e .L25
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:499    .text.startup.main:000000000000024e .L16
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:563    .text.startup.main:000000000000029a .L15
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 29
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:662    .text.startup.main:000000000000031e .L17
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:769    .text.startup.main:000000000000037c .L18
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:737    .text.startup.main:0000000000000364 .L27
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:281    .text.startup.main:000000000000010c .L20
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:344    .text.startup.main:0000000000000178 .L44
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:620    .text.startup.main:00000000000002fa .L13
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:430    .text.startup.main:00000000000001fe .L12
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:630    .text.startup.main:0000000000000304 .L14
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:746    .text.startup.main:000000000000036a .L28
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:702    .text.startup.main:000000000000033e .L19
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:764    .text.startup.main:0000000000000378 .L31
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:758    .text.startup.main:0000000000000374 .L30
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:741    .text.startup.main:0000000000000366 .L46
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:722    .text.startup.main:000000000000035a .L45
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:671    .text.startup.main:0000000000000322 .L21
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:3607   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5160   .debug_str:0000000000000148 .LASF238
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5374   .debug_str:00000000000006b8 .LASF239
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5286   .debug_str:00000000000004c7 .LASF240
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5054   .debug_ranges:0000000000000000 .Ldebug_ranges0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5092   .debug_line:0000000000000000 .Ldebug_line0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5394   .debug_str:0000000000000713 .LASF0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5224   .debug_str:000000000000034c .LASF1
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5178   .debug_str:000000000000024c .LASF6
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5232   .debug_str:0000000000000378 .LASF2
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5506   .debug_str:0000000000000934 .LASF3
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5562   .debug_str:0000000000000a39 .LASF4
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5192   .debug_str:00000000000002a0 .LASF5
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5346   .debug_str:0000000000000633 .LASF7
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5302   .debug_str:0000000000000545 .LASF8
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5354   .debug_str:000000000000065b .LASF9
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5460   .debug_str:0000000000000850 .LASF10
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5226   .debug_str:0000000000000358 .LASF11
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5546   .debug_str:00000000000009ea .LASF12
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5310   .debug_str:0000000000000572 .LASF177
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5486   .debug_str:00000000000008dc .LASF13
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5492   .debug_str:00000000000008f2 .LASF14
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5494   .debug_str:00000000000008fb .LASF15
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5396   .debug_str:0000000000000720 .LASF16
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5538   .debug_str:00000000000009ca .LASF17
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5336   .debug_str:00000000000005ec .LASF18
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5136   .debug_str:00000000000000c7 .LASF19
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5138   .debug_str:00000000000000d2 .LASF20
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5140   .debug_str:00000000000000dd .LASF21
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5142   .debug_str:00000000000000e8 .LASF22
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5144   .debug_str:00000000000000f3 .LASF23
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5146   .debug_str:00000000000000fe .LASF24
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5428   .debug_str:00000000000007c0 .LASF25
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5216   .debug_str:000000000000031e .LASF26
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5218   .debug_str:0000000000000327 .LASF27
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5154   .debug_str:000000000000012c .LASF28
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5156   .debug_str:0000000000000137 .LASF29
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5120   .debug_str:000000000000007b .LASF30
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5122   .debug_str:0000000000000085 .LASF31
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5548   .debug_str:00000000000009f3 .LASF32
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5550   .debug_str:00000000000009fc .LASF33
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5250   .debug_str:00000000000003f9 .LASF34
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 30
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5252   .debug_str:0000000000000402 .LASF35
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5522   .debug_str:0000000000000986 .LASF36
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5106   .debug_str:0000000000000031 .LASF37
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5228   .debug_str:0000000000000360 .LASF38
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5444   .debug_str:0000000000000810 .LASF39
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5316   .debug_str:000000000000058c .LASF40
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5356   .debug_str:0000000000000669 .LASF41
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5358   .debug_str:0000000000000673 .LASF42
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5360   .debug_str:000000000000067d .LASF43
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5362   .debug_str:0000000000000687 .LASF44
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5364   .debug_str:0000000000000691 .LASF45
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5350   .debug_str:0000000000000649 .LASF46
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5352   .debug_str:0000000000000652 .LASF47
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5134   .debug_str:00000000000000bc .LASF48
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5214   .debug_str:0000000000000315 .LASF49
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5152   .debug_str:0000000000000121 .LASF50
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5194   .debug_str:00000000000002a9 .LASF51
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5380   .debug_str:00000000000006d8 .LASF52
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5240   .debug_str:00000000000003b2 .LASF53
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5274   .debug_str:000000000000047f .LASF54
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5148   .debug_str:0000000000000109 .LASF55
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5576   .debug_str:0000000000000a9e .LASF56
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5344   .debug_str:0000000000000627 .LASF57
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5582   .debug_str:0000000000000ac0 .LASF58
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5222   .debug_str:000000000000033d .LASF59
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5516   .debug_str:0000000000000968 .LASF60
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5118   .debug_str:000000000000006d .LASF61
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5384   .debug_str:00000000000006e8 .LASF62
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5272   .debug_str:000000000000046f .LASF63
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5554   .debug_str:0000000000000a0d .LASF64
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5248   .debug_str:00000000000003e9 .LASF65
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5230   .debug_str:0000000000000368 .LASF66
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5254   .debug_str:000000000000040b .LASF67
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5440   .debug_str:00000000000007fa .LASF68
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5496   .debug_str:0000000000000904 .LASF69
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5556   .debug_str:0000000000000a1e .LASF70
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5450   .debug_str:0000000000000824 .LASF71
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5094   .debug_str:0000000000000000 .LASF72
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5176   .debug_str:0000000000000246 .LASF73
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5452   .debug_str:000000000000082c .LASF74
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5432   .debug_str:00000000000007d8 .LASF75
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5098   .debug_str:0000000000000014 .LASF76
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5488   .debug_str:00000000000008e2 .LASF77
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5544   .debug_str:00000000000009e2 .LASF78
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5318   .debug_str:0000000000000593 .LASF79
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5482   .debug_str:00000000000008cc .LASF80
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5326   .debug_str:00000000000005bf .LASF85
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5498   .debug_str:000000000000090b .LASF81
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5334   .debug_str:00000000000005e4 .LASF82
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5388   .debug_str:00000000000006fe .LASF83
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5282   .debug_str:00000000000004b3 .LASF84
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5126   .debug_str:0000000000000097 .LASF86
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5132   .debug_str:00000000000000b3 .LASF87
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5578   .debug_str:0000000000000aaa .LASF88
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5564   .debug_str:0000000000000a4c .LASF89
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5404   .debug_str:000000000000074d .LASF90
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5210   .debug_str:0000000000000303 .LASF91
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 31
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5518   .debug_str:0000000000000977 .LASF92
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5436   .debug_str:00000000000007e7 .LASF93
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5442   .debug_str:0000000000000806 .LASF94
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5574   .debug_str:0000000000000a93 .LASF95
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5184   .debug_str:0000000000000261 .LASF96
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5572   .debug_str:0000000000000a8b .LASF97
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5464   .debug_str:0000000000000873 .LASF98
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5512   .debug_str:0000000000000950 .LASF99
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5536   .debug_str:00000000000009c2 .LASF100
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5426   .debug_str:00000000000007b8 .LASF101
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5530   .debug_str:00000000000009af .LASF102
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5258   .debug_str:0000000000000420 .LASF103
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5532   .debug_str:00000000000009b4 .LASF104
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5472   .debug_str:0000000000000898 .LASF105
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5200   .debug_str:00000000000002c9 .LASF106
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5304   .debug_str:0000000000000557 .LASF107
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5420   .debug_str:000000000000079f .LASF108
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5182   .debug_str:000000000000025b .LASF109
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5526   .debug_str:00000000000009a1 .LASF110
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5280   .debug_str:00000000000004ab .LASF111
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5102   .debug_str:0000000000000021 .LASF112
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5110   .debug_str:0000000000000041 .LASF113
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5448   .debug_str:000000000000081e .LASF114
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5260   .debug_str:0000000000000425 .LASF115
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5408   .debug_str:000000000000075c .LASF116
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5130   .debug_str:00000000000000ad .LASF117
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5470   .debug_str:000000000000088f .LASF118
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5294   .debug_str:0000000000000529 .LASF119
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5500   .debug_str:0000000000000911 .LASF120
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5158   .debug_str:0000000000000142 .LASF121
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5414   .debug_str:0000000000000778 .LASF122
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5308   .debug_str:000000000000056a .LASF123
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5242   .debug_str:00000000000003bc .LASF124
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5320   .debug_str:00000000000005a5 .LASF125
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5268   .debug_str:0000000000000461 .LASF126
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5468   .debug_str:0000000000000887 .LASF127
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5410   .debug_str:0000000000000762 .LASF128
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5528   .debug_str:00000000000009aa .LASF129
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5348   .debug_str:000000000000063e .LASF130
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5236   .debug_str:000000000000038f .LASF131
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5542   .debug_str:00000000000009da .LASF132
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5306   .debug_str:000000000000055f .LASF133
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5338   .debug_str:00000000000005f6 .LASF134
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5552   .debug_str:0000000000000a05 .LASF135
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5198   .debug_str:00000000000002bf .LASF136
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5300   .debug_str:0000000000000540 .LASF137
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5378   .debug_str:00000000000006ce .LASF138
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5116   .debug_str:0000000000000065 .LASF139
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5296   .debug_str:0000000000000531 .LASF140
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5406   .debug_str:0000000000000757 .LASF141
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5340   .debug_str:0000000000000600 .LASF142
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5290   .debug_str:0000000000000513 .LASF143
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5368   .debug_str:00000000000006a2 .LASF144
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5100   .debug_str:000000000000001c .LASF145
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5256   .debug_str:000000000000041b .LASF146
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5484   .debug_str:00000000000008d5 .LASF147
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5386   .debug_str:00000000000006f8 .LASF148
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 32
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5366   .debug_str:000000000000069b .LASF149
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5382   .debug_str:00000000000006e2 .LASF150
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5466   .debug_str:000000000000087f .LASF151
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5446   .debug_str:0000000000000818 .LASF152
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5162   .debug_str:00000000000001d0 .LASF153
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5560   .debug_str:0000000000000a34 .LASF154
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5220   .debug_str:0000000000000330 .LASF155
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5476   .debug_str:00000000000008a5 .LASF156
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5114   .debug_str:0000000000000058 .LASF157
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5202   .debug_str:00000000000002cf .LASF158
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5376   .debug_str:00000000000006bf .LASF159
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5416   .debug_str:0000000000000781 .LASF160
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5490   .debug_str:00000000000008ed .LASF161
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5504   .debug_str:0000000000000927 .LASF162
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5458   .debug_str:0000000000000842 .LASF163
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5412   .debug_str:000000000000076a .LASF164
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5454   .debug_str:0000000000000833 .LASF165
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5322   .debug_str:00000000000005ac .LASF166
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5580   .debug_str:0000000000000ab3 .LASF167
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5190   .debug_str:0000000000000292 .LASF168
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5478   .debug_str:00000000000008b2 .LASF169
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5568   .debug_str:0000000000000a62 .LASF170
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5402   .debug_str:000000000000073e .LASF171
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5128   .debug_str:000000000000009c .LASF172
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5398   .debug_str:0000000000000728 .LASF173
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5540   .debug_str:00000000000009d3 .LASF174
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5370   .debug_str:00000000000006aa .LASF175
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5124   .debug_str:000000000000008f .LASF176
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5096   .debug_str:0000000000000009 .LASF241
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5196   .debug_str:00000000000002b3 .LASF178
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5246   .debug_str:00000000000003d6 .LASF179
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5510   .debug_str:0000000000000946 .LASF180
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5480   .debug_str:00000000000008c1 .LASF181
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5206   .debug_str:00000000000002f3 .LASF242
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:126    .text.startup.main:0000000000000000 .LFB3
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:779    .text.startup.main:0000000000000382 .LFE3
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4361   .debug_loc:0000000000000000 .LLST1
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4374   .debug_loc:0000000000000021 .LLST2
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4401   .debug_loc:0000000000000066 .LLST3
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4437   .debug_loc:00000000000000bd .LLST4
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5180   .debug_str:0000000000000256 .LASF182
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4463   .debug_loc:0000000000000102 .LLST5
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4512   .debug_loc:0000000000000182 .LLST6
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5520   .debug_str:0000000000000981 .LASF183
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4557   .debug_loc:00000000000001f3 .LLST7
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5276   .debug_str:000000000000048a .LASF184
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5372   .debug_str:00000000000006b3 .LASF185
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4578   .debug_loc:0000000000000229 .LLST8
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5456   .debug_str:000000000000083d .LASF186
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4590   .debug_loc:0000000000000249 .LLST9
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5212   .debug_str:000000000000030c .LASF187
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4602   .debug_loc:0000000000000262 .LLST10
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5462   .debug_str:0000000000000867 .LASF188
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4634   .debug_loc:00000000000002b8 .LLST11
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5474   .debug_str:000000000000089e .LASF189
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4657   .debug_loc:00000000000002f3 .LLST12
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4668   .debug_loc:0000000000000311 .LLST13
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 33
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5312   .debug_str:0000000000000582 .LASF190
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4679   .debug_loc:000000000000032f .LLST14
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5314   .debug_str:0000000000000587 .LASF191
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4692   .debug_loc:000000000000034f .LLST15
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5508   .debug_str:000000000000093e .LASF192
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4705   .debug_loc:000000000000036f .LLST16
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5288   .debug_str:0000000000000509 .LASF193
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4725   .debug_loc:00000000000003a4 .LLST17
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5270   .debug_str:0000000000000468 .LASF194
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4767   .debug_loc:000000000000040b .LLST18
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5332   .debug_str:00000000000005dd .LASF195
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5238   .debug_str:00000000000003a8 .LASF196
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4806   .debug_loc:000000000000046f .LLST19
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5422   .debug_str:00000000000007a6 .LASF197
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4832   .debug_loc:00000000000004b1 .LLST20
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5108   .debug_str:0000000000000039 .LASF198
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4867   .debug_loc:000000000000050a .LLST21
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4912   .debug_loc:0000000000000582 .LLST22
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5438   .debug_str:00000000000007f1 .LASF199
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4919   .debug_loc:0000000000000595 .LLST23
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:533    .text.startup.main:0000000000000284 .LBB11
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:564    .text.startup.main:000000000000029a .LBE11
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4958   .debug_loc:00000000000005fd .LLST24
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:4970   .debug_loc:000000000000061d .LLST25
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:170    .text.startup.main:0000000000000032 .LVL16
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:180    .text.startup.main:000000000000003a .LVL17
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:183    .text.startup.main:0000000000000042 .LVL18
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:186    .text.startup.main:000000000000004a .LVL19
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:189    .text.startup.main:0000000000000052 .LVL20
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:193    .text.startup.main:000000000000005c .LVL21
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:197    .text.startup.main:0000000000000066 .LVL22
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:203    .text.startup.main:0000000000000070 .LVL23
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:207    .text.startup.main:000000000000007c .LVL24
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:216    .text.startup.main:0000000000000096 .LVL25
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:219    .text.startup.main:000000000000009e .LVL26
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:224    .text.startup.main:00000000000000ac .LVL27
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:228    .text.startup.main:00000000000000b6 .LVL28
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:234    .text.startup.main:00000000000000ca .LVL29
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:237    .text.startup.main:00000000000000d2 .LVL30
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:290    .text.startup.main:0000000000000116 .LVL33
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:293    .text.startup.main:000000000000011e .LVL34
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:298    .text.startup.main:000000000000012a .LVL35
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:314    .text.startup.main:000000000000013e .LVL37
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:323    .text.startup.main:0000000000000150 .LVL38
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:336    .text.startup.main:000000000000016a .LVL40
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:341    .text.startup.main:0000000000000176 .LVL41
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:348    .text.startup.main:0000000000000182 .LVL42
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:355    .text.startup.main:000000000000018e .LVL43
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:362    .text.startup.main:000000000000019a .LVL44
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:368    .text.startup.main:00000000000001a8 .LVL46
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:373    .text.startup.main:00000000000001b0 .LVL47
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:378    .text.startup.main:00000000000001ba .LVL48
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:380    .text.startup.main:00000000000001c2 .LVL49
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:403    .text.startup.main:00000000000001e2 .LVL53
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:440    .text.startup.main:000000000000020e .LVL60
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:483    .text.startup.main:000000000000023e .LVL67
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:515    .text.startup.main:000000000000026e .LVL72
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 34
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:573    .text.startup.main:00000000000002aa .LVL82
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:578    .text.startup.main:00000000000002b6 .LVL83
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:584    .text.startup.main:00000000000002c2 .LVL84
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:592    .text.startup.main:00000000000002ce .LVL86
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:599    .text.startup.main:00000000000002de .LVL88
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:605    .text.startup.main:00000000000002ec .LVL89
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5584   .debug_str:0000000000000acf .LASF243
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:14     .text.rtcInit:0000000000000000 .LFB2
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:119    .text.rtcInit:00000000000000ae .LFE2
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5011   .debug_loc:000000000000066e .LLST0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:55     .text.rtcInit:0000000000000048 .LBB4
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:60     .text.rtcInit:0000000000000054 .LVL6
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:64     .text.rtcInit:0000000000000060 .LVL7
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:67     .text.rtcInit:0000000000000068 .LVL8
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:70     .text.rtcInit:0000000000000070 .LVL9
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:75     .text.rtcInit:000000000000007c .LVL10
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:78     .text.rtcInit:0000000000000084 .LVL11
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:82     .text.rtcInit:000000000000008e .LVL12
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:86     .text.rtcInit:0000000000000098 .LVL13
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:103    .text.rtcInit:00000000000000a6 .LVL14
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:32     .text.rtcInit:0000000000000012 .LVL0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:35     .text.rtcInit:000000000000001a .LVL1
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:39     .text.rtcInit:0000000000000026 .LVL2
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:42     .text.rtcInit:000000000000002e .LVL3
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:46     .text.rtcInit:0000000000000038 .LVL4
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:52     .text.rtcInit:0000000000000046 .LVL5
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5534   .debug_str:00000000000009bb .LASF244
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5170   .debug_str:0000000000000217 .LASF245
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5298   .debug_str:0000000000000539 .LASF200
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5266   .debug_str:0000000000000459 .LASF201
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5424   .debug_str:00000000000007b0 .LASF202
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5390   .debug_str:0000000000000704 .LASF203
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5112   .debug_str:0000000000000048 .LASF204
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5292   .debug_str:000000000000051d .LASF205
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5234   .debug_str:0000000000000386 .LASF206
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5104   .debug_str:0000000000000027 .LASF207
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5188   .debug_str:0000000000000286 .LASF208
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5502   .debug_str:0000000000000917 .LASF209
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5434   .debug_str:00000000000007e0 .LASF210
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5430   .debug_str:00000000000007ca .LASF211
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5342   .debug_str:0000000000000609 .LASF212
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5150   .debug_str:0000000000000114 .LASF213
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5566   .debug_str:0000000000000a56 .LASF214
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5400   .debug_str:0000000000000731 .LASF215
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5278   .debug_str:0000000000000494 .LASF216
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5166   .debug_str:00000000000001f4 .LASF217
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5330   .debug_str:00000000000005ce .LASF218
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5514   .debug_str:0000000000000959 .LASF219
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5418   .debug_str:000000000000078c .LASF220
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5328   .debug_str:00000000000005c7 .LASF221
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5392   .debug_str:000000000000070c .LASF222
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5324   .debug_str:00000000000005b8 .LASF223
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5174   .debug_str:000000000000023e .LASF224
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5168   .debug_str:00000000000001fb .LASF225
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5172   .debug_str:0000000000000228 .LASF226
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5262   .debug_str:000000000000042c .LASF227
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5570   .debug_str:0000000000000a73 .LASF228
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 35
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5186   .debug_str:000000000000026f .LASF229
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5284   .debug_str:00000000000004b8 .LASF230
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5524   .debug_str:000000000000098f .LASF231
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5558   .debug_str:0000000000000a25 .LASF232
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5204   .debug_str:00000000000002de .LASF233
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5264   .debug_str:0000000000000441 .LASF234
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5208   .debug_str:00000000000002f8 .LASF235
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5164   .debug_str:00000000000001d6 .LASF236
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:5244   .debug_str:00000000000003c3 .LASF237
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:134    .text.startup.main:0000000000000002 .LCFI4
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:130    .text.startup.main:0000000000000000 .LVL15
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:280    .text.startup.main:000000000000010c .LVL31
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:284    .text.startup.main:000000000000010e .LVL32
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:389    .text.startup.main:00000000000001cc .LVL50
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:394    .text.startup.main:00000000000001d0 .LVL51
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:410    .text.startup.main:00000000000001e8 .LVL55
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:401    .text.startup.main:00000000000001da .LVL52
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:407    .text.startup.main:00000000000001e6 .LVL54
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:485    .text.startup.main:0000000000000240 .LVL68
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:511    .text.startup.main:0000000000000262 .LVL71
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:562    .text.startup.main:000000000000029a .LVL80
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:661    .text.startup.main:000000000000031e .LVL99
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:727    .text.startup.main:000000000000035e .LVL109
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:736    .text.startup.main:0000000000000364 .LVL111
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:498    .text.startup.main:000000000000024e .LVL70
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:520    .text.startup.main:0000000000000274 .LVL73
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:570    .text.startup.main:00000000000002a2 .LVL81
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:493    .text.startup.main:0000000000000248 .LVL69
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:732    .text.startup.main:0000000000000360 .LVL110
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:586    .text.startup.main:00000000000002c4 .LVL85
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:597    .text.startup.main:00000000000002d6 .LVL87
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:609    .text.startup.main:00000000000002f0 .LVL90
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:328    .text.startup.main:0000000000000158 .LVL39
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:670    .text.startup.main:0000000000000322 .LVL100
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:740    .text.startup.main:0000000000000366 .LVL112
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:745    .text.startup.main:000000000000036a .LVL113
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:755    .text.startup.main:0000000000000372 .LVL116
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:757    .text.startup.main:0000000000000374 .LVL117
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:768    .text.startup.main:000000000000037c .LVL121
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:774    .text.startup.main:000000000000037e .LVL122
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:752    .text.startup.main:0000000000000370 .LVL115
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:683    .text.startup.main:000000000000032a .LVL101
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:366    .text.startup.main:00000000000001a0 .LVL45
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:470    .text.startup.main:000000000000022e .LVL64
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:473    .text.startup.main:0000000000000232 .LVL65
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:549    .text.startup.main:000000000000028e .LVL77
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:552    .text.startup.main:0000000000000292 .LVL78
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:437    .text.startup.main:0000000000000206 .LVL59
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:477    .text.startup.main:0000000000000236 .LVL66
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:540    .text.startup.main:0000000000000286 .LVL75
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:556    .text.startup.main:0000000000000296 .LVL79
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:645    .text.startup.main:0000000000000312 .LVL94
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:647    .text.startup.main:0000000000000314 .LVL95
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:421    .text.startup.main:00000000000001f6 .LVL57
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:544    .text.startup.main:0000000000000288 .LVL76
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:657    .text.startup.main:000000000000031a .LVL98
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:711    .text.startup.main:000000000000034a .LVL106
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 36
+
+
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:721    .text.startup.main:000000000000035a .LVL108
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:453    .text.startup.main:000000000000021a .LVL61
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:467    .text.startup.main:000000000000022a .LVL63
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:535    .text.startup.main:0000000000000284 .LVL74
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:654    .text.startup.main:0000000000000318 .LVL97
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:651    .text.startup.main:0000000000000316 .LVL96
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:718    .text.startup.main:0000000000000358 .LVL107
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:749    .text.startup.main:000000000000036c .LVL114
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:761    .text.startup.main:0000000000000376 .LVL118
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:763    .text.startup.main:0000000000000378 .LVL119
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:766    .text.startup.main:000000000000037a .LVL120
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:459    .text.startup.main:0000000000000226 .LVL62
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:688    .text.startup.main:000000000000032e .LVL102
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:695    .text.startup.main:0000000000000338 .LVL103
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:698    .text.startup.main:000000000000033a .LVL104
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:700    .text.startup.main:000000000000033c .LVL105
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:21     .text.rtcInit:0000000000000002 .LCFI0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:97     .text.rtcInit:000000000000009e .LCFI1
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:105    .text.rtcInit:00000000000000a6 .LCFI2
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:115    .text.rtcInit:00000000000000ac .LCFI3
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:829    .debug_info:0000000000000000 .Ldebug_info0
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:89     .text.rtcInit:0000000000000098 .LBE4
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:99     .text.rtcInit:000000000000009e .LBB7
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:108    .text.rtcInit:00000000000000a6 .LBE7
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:451    .text.startup.main:000000000000021a .LBB8
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:461    .text.startup.main:0000000000000226 .LBE8
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:464    .text.startup.main:0000000000000228 .LBB9
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:479    .text.startup.main:0000000000000236 .LBE9
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:521    .text.startup.main:0000000000000274 .LBB10
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:565    .text.startup.main:000000000000029a .LBE10
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:663    .text.startup.main:000000000000031e .LBB16
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:729    .text.startup.main:000000000000035e .LBE16
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:738    .text.startup.main:0000000000000364 .LBB17
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:777    .text.startup.main:0000000000000382 .LBE17
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:675    .text.startup.main:0000000000000324 .LBB12
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:678    .text.startup.main:0000000000000326 .LBE12
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:684    .text.startup.main:000000000000032a .LBB13
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:723    .text.startup.main:000000000000035a .LBE13
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:742    .text.startup.main:0000000000000366 .LBB14
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:747    .text.startup.main:000000000000036a .LBE14
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:759    .text.startup.main:0000000000000374 .LBB15
+C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s:770    .text.startup.main:000000000000037c .LBE15
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+pmu_backup_write_enable
+bkp_deinit
+bkp_rtc_calibration_value_set
+rcu_osci_stab_wait
+rcu_rtc_clock_config
+rtc_register_sync_wait
+rtc_lwoff_wait
+rtc_prescaler_set
+rtc_flag_clear
+rtc_interrupt_enable
+memcpy
+t5omsi
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccmlUdez.s 			page 37
+
+
+colinit
+l88init
+keyinit
+ADC3powerUpInit
+Lcd_SetType
+Lcd_Init
+LCD_Clear
+LCD_ShowStr
+rtc_counter_set
+u0init
+LCD_DrawPoint
+eclic_global_interrupt_enable
+LCD_WR_Queue
+u0_TX_Queue
+adc_flag_get
+adc_inserted_data_read
+l88mem
+adc_flag_clear
+usart_flag_get
+usart_data_receive
+t5expq
+colset
+l88row
+keyscan
+adc_software_trigger_enable
+adc_regular_data_read
