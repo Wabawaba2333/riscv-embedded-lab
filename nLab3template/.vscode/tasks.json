@@ -1,0 +1,36 @@
+{
+    // Task shortcuts for compilation and downloading
+    "version": "2.0.0",
+    "tasks": [
+        {   // Just compile
+            "label": "lio make",
+            "type": "shell",
+            "command": "make",
+            "problemMatcher": []
+        },
+        {   // Compile and download
+            "label": "lio make dfu",
+            "type": "shell",
+            "command": "make dfu",
+            "problemMatcher": []
+        },
+        {   // Clean up compiled objects
+            "label": "lio make clean",
+            "type": "shell",
+            "command": "make clean",
+            "problemMatcher": []
+        },
+        {   // Just compile, with software debugger included
+            "label": "lio make debug",
+            "type": "shell",
+            "command": "make debug",
+            "problemMatcher": []
+        },
+        {   // Compile and download, with software debugger
+            "label": "lio make debug dfu",
+            "type": "shell",
+            "command": "make debug download",
+            "problemMatcher": []
+        }
+    ]
+  }

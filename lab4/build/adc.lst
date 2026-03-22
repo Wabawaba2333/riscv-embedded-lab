@@ -1,0 +1,449 @@
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 1
+
+
+   1              		.file	"adc.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.ADC3powerUpInit,"ax",@progbits
+  10              		.align	1
+  11              		.globl	ADC3powerUpInit
+  13              	ADC3powerUpInit:
+  14              	.LFB2:
+  15              		.file 1 "adc.c"
+   1:adc.c         **** #include "adc.h"
+   2:adc.c         **** #include "gd32vf103.h"
+   3:adc.c         **** 
+   4:adc.c         **** void ADC3powerUpInit(int tmp) {
+  16              		.loc 1 4 31
+  17              		.cfi_startproc
+  18              	.LVL0:
+   5:adc.c         ****     rcu_periph_clock_enable(RCU_GPIOA);
+  19              		.loc 1 5 5
+   4:adc.c         ****     rcu_periph_clock_enable(RCU_GPIOA);
+  20              		.loc 1 4 31 is_stmt 0
+  21 0000 4111     		addi	sp,sp,-16
+  22              	.LCFI0:
+  23              		.cfi_def_cfa_offset 16
+  24 0002 26C2     		sw	s1,4(sp)
+  25              		.cfi_offset 9, -12
+  26 0004 AA84     		mv	s1,a0
+  27              		.loc 1 5 5
+  28 0006 13052060 		li	a0,1538
+  29              	.LVL1:
+   4:adc.c         ****     rcu_periph_clock_enable(RCU_GPIOA);
+  30              		.loc 1 4 31
+  31 000a 06C6     		sw	ra,12(sp)
+  32 000c 22C4     		sw	s0,8(sp)
+  33              		.cfi_offset 1, -4
+  34              		.cfi_offset 8, -8
+  35              		.loc 1 5 5
+  36 000e 97000000 		call	rcu_periph_clock_enable
+  36      E7800000 
+  37              	.LVL2:
+   6:adc.c         ****     rcu_periph_clock_enable(RCU_ADC0);
+  38              		.loc 1 6 5 is_stmt 1
+  39 0016 13059060 		li	a0,1545
+  40 001a 97000000 		call	rcu_periph_clock_enable
+  40      E7800000 
+  41              	.LVL3:
+   7:adc.c         ****     rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV8);
+  42              		.loc 1 7 5
+  43 0022 0D45     		li	a0,3
+  44 0024 97000000 		call	rcu_adc_clock_config
+  44      E7800000 
+  45              	.LVL4:
+   8:adc.c         **** 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 2
+
+
+   9:adc.c         ****     gpio_init(GPIOA, GPIO_MODE_AIN, GPIO_MODE_OUT_PP, GPIO_PIN_3);
+  46              		.loc 1 9 5
+  47 002c 37140140 		li	s0,1073811456
+  48 0030 13050480 		addi	a0,s0,-2048
+  49 0034 A146     		li	a3,8
+  50 0036 4146     		li	a2,16
+  51 0038 8145     		li	a1,0
+  52 003a 97000000 		call	gpio_init
+  52      E7800000 
+  53              	.LVL5:
+  10:adc.c         ****     gpio_init(GPIOA, GPIO_MODE_AIN, GPIO_MODE_OUT_PP, GPIO_PIN_2);      //!SWIM!
+  54              		.loc 1 10 5
+  55 0042 9146     		li	a3,4
+  56 0044 4146     		li	a2,16
+  57 0046 8145     		li	a1,0
+  58 0048 13050480 		addi	a0,s0,-2048
+  59 004c 97000000 		call	gpio_init
+  59      E7800000 
+  60              	.LVL6:
+  11:adc.c         **** 
+  12:adc.c         ****     adc_deinit(ADC0);                                                   // Reset...
+  61              		.loc 1 12 5
+  62 0054 37240140 		li	s0,1073815552
+  63 0058 13050440 		addi	a0,s0,1024
+  64 005c 97000000 		call	adc_deinit
+  64      E7800000 
+  65              	.LVL7:
+  13:adc.c         ****     adc_mode_config(ADC_MODE_FREE);                                     // ADC0 & ADC1 runs indep.
+  66              		.loc 1 13 5
+  67 0064 0145     		li	a0,0
+  68 0066 97000000 		call	adc_mode_config
+  68      E7800000 
+  69              	.LVL8:
+  14:adc.c         ****     adc_special_function_config(ADC0, ADC_CONTINUOUS_MODE, DISABLE);    // Trigger each sample
+  70              		.loc 1 14 5
+  71 006e 0146     		li	a2,0
+  72 0070 8945     		li	a1,2
+  73 0072 13050440 		addi	a0,s0,1024
+  74 0076 97000000 		call	adc_special_function_config
+  74      E7800000 
+  75              	.LVL9:
+  15:adc.c         ****     adc_special_function_config(ADC0, ADC_SCAN_MODE, DISABLE);          // Scan mode disable
+  76              		.loc 1 15 5
+  77 007e 0146     		li	a2,0
+  78 0080 93050010 		li	a1,256
+  79 0084 13050440 		addi	a0,s0,1024
+  80 0088 97000000 		call	adc_special_function_config
+  80      E7800000 
+  81              	.LVL10:
+  16:adc.c         ****     adc_data_alignment_config(ADC0, ADC_DATAALIGN_RIGHT);               // Align ADC value right
+  82              		.loc 1 16 5
+  83 0090 8145     		li	a1,0
+  84 0092 13050440 		addi	a0,s0,1024
+  85 0096 97000000 		call	adc_data_alignment_config
+  85      E7800000 
+  86              	.LVL11:
+  17:adc.c         ****     adc_channel_length_config(ADC0, ADC_REGULAR_CHANNEL, 1);            // Convert one channel
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 3
+
+
+  87              		.loc 1 17 5
+  88 009e 0546     		li	a2,1
+  89 00a0 8545     		li	a1,1
+  90 00a2 13050440 		addi	a0,s0,1024
+  91 00a6 97000000 		call	adc_channel_length_config
+  91      E7800000 
+  92              	.LVL12:
+  18:adc.c         **** 
+  19:adc.c         ****     adc_regular_channel_config(ADC0, 0, ADC_CHANNEL_3, 
+  93              		.loc 1 19 5
+  94 00ae 8946     		li	a3,2
+  95 00b0 0D46     		li	a2,3
+  96 00b2 8145     		li	a1,0
+  97 00b4 13050440 		addi	a0,s0,1024
+  98 00b8 97000000 		call	adc_regular_channel_config
+  98      E7800000 
+  99              	.LVL13:
+  20:adc.c         ****                                ADC_SAMPLETIME_13POINT5);                // Conv. takes 13.5us
+  21:adc.c         ****     adc_external_trigger_source_config(ADC0, ADC_REGULAR_CHANNEL, 
+ 100              		.loc 1 21 5
+ 101 00c0 37060E00 		li	a2,917504
+ 102 00c4 8545     		li	a1,1
+ 103 00c6 13050440 		addi	a0,s0,1024
+ 104 00ca 97000000 		call	adc_external_trigger_source_config
+ 104      E7800000 
+ 105              	.LVL14:
+  22:adc.c         ****                                        ADC0_1_EXTTRIG_REGULAR_NONE);    // SW Trigger
+  23:adc.c         ****     adc_external_trigger_config(ADC0, ADC_REGULAR_CHANNEL, ENABLE);     // Enable trigger
+ 106              		.loc 1 23 5
+ 107 00d2 0546     		li	a2,1
+ 108 00d4 8545     		li	a1,1
+ 109 00d6 13050440 		addi	a0,s0,1024
+ 110 00da 97000000 		call	adc_external_trigger_config
+ 110      E7800000 
+ 111              	.LVL15:
+  24:adc.c         **** 
+  25:adc.c         ****     if (tmp) {                                                          // Add Ch16 Temp?
+ 112              		.loc 1 25 5
+ 113              		.loc 1 25 8 is_stmt 0
+ 114 00e2 9DCC     		beq	s1,zero,.L2
+  26:adc.c         ****         adc_special_function_config(ADC0, ADC_INSERTED_CHANNEL_AUTO, ENABLE);
+ 115              		.loc 1 26 9 is_stmt 1
+ 116 00e4 0546     		li	a2,1
+ 117 00e6 93050040 		li	a1,1024
+ 118 00ea 13050440 		addi	a0,s0,1024
+ 119 00ee 97000000 		call	adc_special_function_config
+ 119      E7800000 
+ 120              	.LVL16:
+  27:adc.c         ****         adc_channel_length_config(ADC0, ADC_INSERTED_CHANNEL, 1);
+ 121              		.loc 1 27 9
+ 122 00f6 0546     		li	a2,1
+ 123 00f8 8945     		li	a1,2
+ 124 00fa 13050440 		addi	a0,s0,1024
+ 125 00fe 97000000 		call	adc_channel_length_config
+ 125      E7800000 
+ 126              	.LVL17:
+  28:adc.c         ****         adc_tempsensor_vrefint_enable();  
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 4
+
+
+ 127              		.loc 1 28 9
+ 128 0106 97000000 		call	adc_tempsensor_vrefint_enable
+ 128      E7800000 
+ 129              	.LVL18:
+  29:adc.c         ****         //adc_inserted_channel_config(ADC0, 0, ADC_CHANNEL_16, ADC_SAMPLETIME_239POINT5);
+  30:adc.c         ****         adc_inserted_channel_config(ADC0, 0, ADC_CHANNEL_17, ADC_SAMPLETIME_239POINT5); //!SWIM!
+ 130              		.loc 1 30 9
+ 131 010e 9D46     		li	a3,7
+ 132 0110 4546     		li	a2,17
+ 133 0112 8145     		li	a1,0
+ 134 0114 13050440 		addi	a0,s0,1024
+ 135 0118 97000000 		call	adc_inserted_channel_config
+ 135      E7800000 
+ 136              	.LVL19:
+ 137              	.L2:
+  31:adc.c         ****     }
+  32:adc.c         **** 
+  33:adc.c         ****     adc_enable(ADC0);                                                   // ...enable!...
+ 138              		.loc 1 33 5
+ 139 0120 37240140 		li	s0,1073815552
+ 140 0124 13050440 		addi	a0,s0,1024
+ 141 0128 97000000 		call	adc_enable
+ 141      E7800000 
+ 142              	.LVL20:
+  34:adc.c         ****     //delay_1ms(1);
+  35:adc.c         ****     for (int i=0; i<0xFFFF; i++);                                       // ...wait 1ms...
+ 143              		.loc 1 35 5
+ 144              		.loc 1 35 10
+  36:adc.c         ****     adc_calibration_enable(ADC0);                                       // ...calibrate...
+ 145              		.loc 1 36 5
+ 146 0130 13050440 		addi	a0,s0,1024
+ 147 0134 97000000 		call	adc_calibration_enable
+ 147      E7800000 
+ 148              	.LVL21:
+  37:adc.c         ****     //delay_1ms(1);                                                     // ...wait 1ms...
+  38:adc.c         ****     for (int i=0; i<0xFFFF; i++);
+ 149              		.loc 1 38 5
+ 150              		.loc 1 38 10
+  39:adc.c         ****     adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);             // ...trigger 1:st conv!
+ 151              		.loc 1 39 5
+ 152 013c 13050440 		addi	a0,s0,1024
+  40:adc.c         **** }...
+ 153              		.loc 1 40 1 is_stmt 0
+ 154 0140 2244     		lw	s0,8(sp)
+ 155              		.cfi_restore 8
+ 156 0142 B240     		lw	ra,12(sp)
+ 157              		.cfi_restore 1
+ 158 0144 9244     		lw	s1,4(sp)
+ 159              		.cfi_restore 9
+ 160              	.LVL22:
+  39:adc.c         ****     adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);             // ...trigger 1:st conv!
+ 161              		.loc 1 39 5
+ 162 0146 8545     		li	a1,1
+ 163              		.loc 1 40 1
+ 164 0148 4101     		addi	sp,sp,16
+ 165              	.LCFI1:
+ 166              		.cfi_def_cfa_offset 0
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 5
+
+
+  39:adc.c         ****     adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);             // ...trigger 1:st conv!
+ 167              		.loc 1 39 5
+ 168 014a 17030000 		tail	adc_software_trigger_enable
+ 168      67000300 
+ 169              	.LVL23:
+ 170              		.cfi_endproc
+ 171              	.LFE2:
+ 173              		.text
+ 174              	.Letext0:
+ 175              		.file 2 "c:\\kth\\digtal teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 176              		.file 3 "c:\\kth\\digtal teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 177              		.file 4 "./../../firmware/GD32VF103_standard_peripheral/gd32vf103.h"
+ 178              		.file 5 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_rcu.h"
+ 179              		.file 6 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_gpio.h"
+ 180              		.file 7 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_adc.h"
+ 181              		.file 8 "./../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 adc.c
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:13     .text.ADC3powerUpInit:0000000000000000 ADC3powerUpInit
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:17     .text.ADC3powerUpInit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:19     .text.ADC3powerUpInit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:20     .text.ADC3powerUpInit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:21     .text.ADC3powerUpInit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:23     .text.ADC3powerUpInit:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:25     .text.ADC3powerUpInit:0000000000000004 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:28     .text.ADC3powerUpInit:0000000000000006 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:31     .text.ADC3powerUpInit:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:33     .text.ADC3powerUpInit:000000000000000e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:34     .text.ADC3powerUpInit:000000000000000e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:36     .text.ADC3powerUpInit:000000000000000e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:39     .text.ADC3powerUpInit:0000000000000016 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:43     .text.ADC3powerUpInit:0000000000000022 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:47     .text.ADC3powerUpInit:000000000000002c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:55     .text.ADC3powerUpInit:0000000000000042 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:62     .text.ADC3powerUpInit:0000000000000054 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:67     .text.ADC3powerUpInit:0000000000000064 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:71     .text.ADC3powerUpInit:000000000000006e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:77     .text.ADC3powerUpInit:000000000000007e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:83     .text.ADC3powerUpInit:0000000000000090 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:88     .text.ADC3powerUpInit:000000000000009e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:94     .text.ADC3powerUpInit:00000000000000ae .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:101    .text.ADC3powerUpInit:00000000000000c0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:107    .text.ADC3powerUpInit:00000000000000d2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:113    .text.ADC3powerUpInit:00000000000000e2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:114    .text.ADC3powerUpInit:00000000000000e2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:116    .text.ADC3powerUpInit:00000000000000e4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:122    .text.ADC3powerUpInit:00000000000000f6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:128    .text.ADC3powerUpInit:0000000000000106 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:131    .text.ADC3powerUpInit:000000000000010e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:139    .text.ADC3powerUpInit:0000000000000120 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:144    .text.ADC3powerUpInit:0000000000000130 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:145    .text.ADC3powerUpInit:0000000000000130 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:146    .text.ADC3powerUpInit:0000000000000130 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:150    .text.ADC3powerUpInit:000000000000013c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:151    .text.ADC3powerUpInit:000000000000013c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:152    .text.ADC3powerUpInit:000000000000013c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:154    .text.ADC3powerUpInit:0000000000000140 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:155    .text.ADC3powerUpInit:0000000000000142 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:157    .text.ADC3powerUpInit:0000000000000144 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:159    .text.ADC3powerUpInit:0000000000000146 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:162    .text.ADC3powerUpInit:0000000000000146 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:164    .text.ADC3powerUpInit:0000000000000148 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:166    .text.ADC3powerUpInit:000000000000014a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:168    .text.ADC3powerUpInit:000000000000014a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:170    .text.ADC3powerUpInit:0000000000000152 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:173    .text.ADC3powerUpInit:0000000000000152 .L0 
+                     .debug_frame:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:137    .text.ADC3powerUpInit:0000000000000120 .L2
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:941    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1260   .debug_str:0000000000000000 .LASF69
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1290   .debug_str:0000000000000143 .LASF70
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1394   .debug_str:00000000000003f8 .LASF71
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1252   .debug_ranges:0000000000000000 .Ldebug_ranges0
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 7
+
+
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1258   .debug_line:0000000000000000 .Ldebug_line0
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1350   .debug_str:000000000000029e .LASF0
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1344   .debug_str:0000000000000272 .LASF1
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1404   .debug_str:0000000000000467 .LASF6
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1334   .debug_str:0000000000000231 .LASF2
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1292   .debug_str:0000000000000149 .LASF3
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1356   .debug_str:00000000000002cd .LASF4
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1310   .debug_str:00000000000001b4 .LASF5
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1286   .debug_str:0000000000000130 .LASF7
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1372   .debug_str:0000000000000359 .LASF8
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1284   .debug_str:0000000000000122 .LASF9
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1346   .debug_str:000000000000027e .LASF10
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1294   .debug_str:0000000000000153 .LASF11
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1348   .debug_str:0000000000000295 .LASF12
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1262   .debug_str:0000000000000088 .LASF72
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1298   .debug_str:0000000000000164 .LASF13
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1402   .debug_str:0000000000000460 .LASF14
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1296   .debug_str:000000000000015b .LASF15
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1364   .debug_str:000000000000030e .LASF16
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1400   .debug_str:0000000000000458 .LASF17
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1398   .debug_str:000000000000044f .LASF18
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1386   .debug_str:00000000000003bc .LASF19
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1320   .debug_str:00000000000001e3 .LASF20
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1322   .debug_str:00000000000001ee .LASF21
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1324   .debug_str:00000000000001f9 .LASF22
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1326   .debug_str:0000000000000204 .LASF23
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1328   .debug_str:000000000000020f .LASF24
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1330   .debug_str:000000000000021a .LASF25
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1308   .debug_str:00000000000001aa .LASF26
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1314   .debug_str:00000000000001c6 .LASF27
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1316   .debug_str:00000000000001cf .LASF28
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1382   .debug_str:00000000000003a6 .LASF29
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1384   .debug_str:00000000000003b1 .LASF30
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1388   .debug_str:00000000000003c6 .LASF31
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1390   .debug_str:00000000000003d0 .LASF32
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1358   .debug_str:00000000000002e0 .LASF33
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1360   .debug_str:00000000000002e9 .LASF34
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1300   .debug_str:000000000000016c .LASF35
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1302   .debug_str:0000000000000175 .LASF36
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1342   .debug_str:0000000000000269 .LASF37
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1354   .debug_str:00000000000002c5 .LASF38
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1368   .debug_str:000000000000032e .LASF39
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1288   .debug_str:000000000000013b .LASF40
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1264   .debug_str:0000000000000098 .LASF41
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1270   .debug_str:00000000000000ba .LASF42
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1272   .debug_str:00000000000000c4 .LASF43
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1274   .debug_str:00000000000000ce .LASF44
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1276   .debug_str:00000000000000d8 .LASF45
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1278   .debug_str:00000000000000e2 .LASF46
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1338   .debug_str:0000000000000257 .LASF47
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1340   .debug_str:0000000000000260 .LASF48
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1318   .debug_str:00000000000001d8 .LASF49
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1312   .debug_str:00000000000001bd .LASF50
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1380   .debug_str:000000000000039b .LASF51
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1332   .debug_str:0000000000000225 .LASF52
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1268   .debug_str:00000000000000aa .LASF73
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:14     .text.ADC3powerUpInit:0000000000000000 .LFB2
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 8
+
+
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:171    .text.ADC3powerUpInit:0000000000000152 .LFE2
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1203   .debug_loc:0000000000000000 .LLST0
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1221   .debug_loc:000000000000002c .LLST1
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:37     .text.ADC3powerUpInit:0000000000000016 .LVL2
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:41     .text.ADC3powerUpInit:0000000000000022 .LVL3
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:45     .text.ADC3powerUpInit:000000000000002c .LVL4
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:53     .text.ADC3powerUpInit:0000000000000042 .LVL5
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:60     .text.ADC3powerUpInit:0000000000000054 .LVL6
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:65     .text.ADC3powerUpInit:0000000000000064 .LVL7
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:69     .text.ADC3powerUpInit:000000000000006e .LVL8
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:75     .text.ADC3powerUpInit:000000000000007e .LVL9
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:81     .text.ADC3powerUpInit:0000000000000090 .LVL10
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:86     .text.ADC3powerUpInit:000000000000009e .LVL11
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:92     .text.ADC3powerUpInit:00000000000000ae .LVL12
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:99     .text.ADC3powerUpInit:00000000000000c0 .LVL13
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:105    .text.ADC3powerUpInit:00000000000000d2 .LVL14
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:111    .text.ADC3powerUpInit:00000000000000e2 .LVL15
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:120    .text.ADC3powerUpInit:00000000000000f6 .LVL16
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:126    .text.ADC3powerUpInit:0000000000000106 .LVL17
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:129    .text.ADC3powerUpInit:000000000000010e .LVL18
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:136    .text.ADC3powerUpInit:0000000000000120 .LVL19
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:142    .text.ADC3powerUpInit:0000000000000130 .LVL20
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:148    .text.ADC3powerUpInit:000000000000013c .LVL21
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:169    .text.ADC3powerUpInit:0000000000000152 .LVL23
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1336   .debug_str:000000000000023f .LASF53
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1396   .debug_str:000000000000043a .LASF54
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1378   .debug_str:0000000000000391 .LASF55
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1266   .debug_str:000000000000009f .LASF56
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1304   .debug_str:000000000000017e .LASF57
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1282   .debug_str:0000000000000106 .LASF58
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1352   .debug_str:00000000000002ab .LASF59
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1280   .debug_str:00000000000000ec .LASF60
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1376   .debug_str:0000000000000376 .LASF61
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1370   .debug_str:0000000000000336 .LASF62
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1306   .debug_str:000000000000018e .LASF63
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1392   .debug_str:00000000000003da .LASF64
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1406   .debug_str:0000000000000471 .LASF65
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1374   .debug_str:000000000000036b .LASF66
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1366   .debug_str:0000000000000317 .LASF67
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:1362   .debug_str:00000000000002f2 .LASF68
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:22     .text.ADC3powerUpInit:0000000000000002 .LCFI0
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:165    .text.ADC3powerUpInit:000000000000014a .LCFI1
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:18     .text.ADC3powerUpInit:0000000000000000 .LVL0
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:29     .text.ADC3powerUpInit:000000000000000a .LVL1
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:160    .text.ADC3powerUpInit:0000000000000146 .LVL22
+C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s:183    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+rcu_adc_clock_config
+gpio_init
+adc_deinit
+adc_mode_config
+adc_special_function_config
+adc_data_alignment_config
+adc_channel_length_config
+adc_regular_channel_config
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccBp1gMa.s 			page 9
+
+
+adc_external_trigger_source_config
+adc_external_trigger_config
+adc_tempsensor_vrefint_enable
+adc_inserted_channel_config
+adc_enable
+adc_calibration_enable
+adc_software_trigger_enable
