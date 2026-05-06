@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "GD32V Debug",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/gd32vf103_debug.elf",
+        "args": ["--target=riscv32-unknown-elf"],
+        "cwd": "${workspaceFolder}",
+        "miDebuggerServerAddress": "/dev/cu.usbmodem11301",
+        "MIMode": "gdb",
+        "miDebuggerPath": "${workspaceFolder}/../../compiler/bin/riscv64-unknown-elf-gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+          {
+            "text": "set architecture riscv:rv32"
+          },
+          {
+            "text": "set remotelogfile build/debug_log.txt"
+          },
+          {
+            "text": "set remotebreak on"
+          },
+        ]
+      }
+    ]
+  }

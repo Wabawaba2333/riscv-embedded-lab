@@ -1,0 +1,594 @@
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 1
+
+
+   1              		.file	"alarm.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.alnit,"ax",@progbits
+  10              		.align	1
+  11              		.globl	alnit
+  13              	alnit:
+  14              	.LFB2:
+  15              		.file 1 "alarm.c"
+   1:alarm.c       **** #include "pwm.h"
+   2:alarm.c       **** 
+   3:alarm.c       **** void alnit(uint16_t ch){
+  16              		.loc 1 3 24
+  17              		.cfi_startproc
+  18              	.LVL0:
+   4:alarm.c       ****     timer_oc_parameter_struct timer_ocinitpara;
+  19              		.loc 1 4 5
+   5:alarm.c       ****     timer_parameter_struct timer_initpara;
+  20              		.loc 1 5 5
+   6:alarm.c       ****     rcu_periph_clock_enable(RCU_GPIOA);
+  21              		.loc 1 6 5
+   3:alarm.c       ****     timer_parameter_struct timer_initpara;
+  22              		.loc 1 3 24 is_stmt 0
+  23 0000 7971     		addi	sp,sp,-48
+  24              	.LCFI0:
+  25              		.cfi_def_cfa_offset 48
+  26 0002 22D4     		sw	s0,40(sp)
+  27              		.cfi_offset 8, -8
+  28 0004 2A84     		mv	s0,a0
+  29              		.loc 1 6 5
+  30 0006 13052060 		li	a0,1538
+  31              	.LVL1:
+   3:alarm.c       ****     timer_parameter_struct timer_initpara;
+  32              		.loc 1 3 24
+  33 000a 06D6     		sw	ra,44(sp)
+  34 000c 26D2     		sw	s1,36(sp)
+  35              		.cfi_offset 1, -4
+  36              		.cfi_offset 9, -12
+  37              		.loc 1 6 5
+  38 000e 97000000 		call	rcu_periph_clock_enable
+  38      E7800000 
+  39              	.LVL2:
+   7:alarm.c       ****     rcu_periph_clock_enable(RCU_AF);
+  40              		.loc 1 7 5 is_stmt 1
+  41 0016 13050060 		li	a0,1536
+  42 001a 93741400 		andi	s1,s0,1
+  43 001e 97000000 		call	rcu_periph_clock_enable
+  43      E7800000 
+  44              	.LVL3:
+   8:alarm.c       ****     if (ch&0x1) gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
+  45              		.loc 1 8 5
+  46              		.loc 1 8 8 is_stmt 0
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 2
+
+
+  47 0026 81CC     		beq	s1,zero,.L2
+  48              		.loc 1 8 17 is_stmt 1 discriminator 1
+  49 0028 37150140 		li	a0,1073811456
+  50 002c 8546     		li	a3,1
+  51 002e 0D46     		li	a2,3
+  52 0030 E145     		li	a1,24
+  53 0032 13050580 		addi	a0,a0,-2048
+  54 0036 97000000 		call	gpio_init
+  54      E7800000 
+  55              	.LVL4:
+  56              	.L2:
+   9:alarm.c       ****     if (ch&0x2) gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_1);
+  57              		.loc 1 9 5
+  58 003e 0988     		andi	s0,s0,2
+  59              		.loc 1 9 8 is_stmt 0
+  60 0040 01CC     		beq	s0,zero,.L3
+  61              		.loc 1 9 17 is_stmt 1 discriminator 1
+  62 0042 37150140 		li	a0,1073811456
+  63 0046 8946     		li	a3,2
+  64 0048 0D46     		li	a2,3
+  65 004a E145     		li	a1,24
+  66 004c 13050580 		addi	a0,a0,-2048
+  67 0050 97000000 		call	gpio_init
+  67      E7800000 
+  68              	.LVL5:
+  69              	.L3:
+  10:alarm.c       ****     rcu_periph_clock_enable(RCU_TIMER1);
+  70              		.loc 1 10 5
+  71 0058 13050070 		li	a0,1792
+  72 005c 97000000 		call	rcu_periph_clock_enable
+  72      E7800000 
+  73              	.LVL6:
+  11:alarm.c       **** 
+  12:alarm.c       ****     timer_deinit(TIMER1);
+  74              		.loc 1 12 5
+  75 0064 37050040 		li	a0,1073741824
+  76 0068 97000000 		call	timer_deinit
+  76      E7800000 
+  77              	.LVL7:
+  13:alarm.c       ****     timer_struct_para_init(&timer_initpara);
+  78              		.loc 1 13 5
+  79 0070 0808     		addi	a0,sp,16
+  80 0072 97000000 		call	timer_struct_para_init
+  80      E7800000 
+  81              	.LVL8:
+  14:alarm.c       ****     timer_initpara.prescaler         = 107;
+  82              		.loc 1 14 5
+  15:alarm.c       ****     timer_initpara.alignedmode       = TIMER_COUNTER_EDGE;
+  83              		.loc 1 15 5
+  16:alarm.c       ****     timer_initpara.counterdirection  = TIMER_COUNTER_UP;
+  84              		.loc 1 16 5
+  14:alarm.c       ****     timer_initpara.prescaler         = 107;
+  85              		.loc 1 14 38 is_stmt 0
+  86 007a 9307B006 		li	a5,107
+  87 007e 3EC8     		sw	a5,16(sp)
+  17:alarm.c       ****     timer_initpara.period            = 15999;
+  88              		.loc 1 17 38
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 3
+
+
+  89 0080 9167     		li	a5,16384
+  90 0082 9387F7E7 		addi	a5,a5,-385
+  18:alarm.c       ****     timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
+  19:alarm.c       ****     timer_initpara.repetitioncounter = 0;
+  20:alarm.c       ****     timer_init(TIMER1, &timer_initpara);
+  91              		.loc 1 20 5
+  92 0086 0C08     		addi	a1,sp,16
+  93 0088 37050040 		li	a0,1073741824
+  17:alarm.c       ****     timer_initpara.period            = 15999;
+  94              		.loc 1 17 38
+  95 008c 3ECC     		sw	a5,24(sp)
+  16:alarm.c       ****     timer_initpara.period            = 15999;
+  96              		.loc 1 16 38
+  97 008e 231A0100 		sh	zero,20(sp)
+  17:alarm.c       ****     timer_initpara.period            = 15999;
+  98              		.loc 1 17 5 is_stmt 1
+  18:alarm.c       ****     timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
+  99              		.loc 1 18 5
+  18:alarm.c       ****     timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
+ 100              		.loc 1 18 38 is_stmt 0
+ 101 0092 231E0100 		sh	zero,28(sp)
+  19:alarm.c       ****     timer_init(TIMER1, &timer_initpara);
+ 102              		.loc 1 19 5 is_stmt 1
+  19:alarm.c       ****     timer_init(TIMER1, &timer_initpara);
+ 103              		.loc 1 19 38 is_stmt 0
+ 104 0096 230F0100 		sb	zero,30(sp)
+ 105              		.loc 1 20 5 is_stmt 1
+ 106 009a 97000000 		call	timer_init
+ 106      E7800000 
+ 107              	.LVL9:
+  21:alarm.c       **** 
+  22:alarm.c       ****     timer_channel_output_struct_para_init(&timer_ocinitpara);
+ 108              		.loc 1 22 5
+ 109 00a2 4800     		addi	a0,sp,4
+ 110 00a4 97000000 		call	timer_channel_output_struct_para_init
+ 110      E7800000 
+ 111              	.LVL10:
+  23:alarm.c       ****     timer_ocinitpara.outputstate  = TIMER_CCX_ENABLE;
+ 112              		.loc 1 23 5
+  24:alarm.c       ****     timer_ocinitpara.outputnstate = TIMER_CCXN_DISABLE;
+ 113              		.loc 1 24 5
+  25:alarm.c       ****     timer_ocinitpara.ocpolarity   = TIMER_OC_POLARITY_HIGH;
+ 114              		.loc 1 25 5
+  26:alarm.c       ****     timer_ocinitpara.ocnpolarity  = TIMER_OCN_POLARITY_HIGH;
+ 115              		.loc 1 26 5
+  27:alarm.c       ****     timer_ocinitpara.ocidlestate  = TIMER_OC_IDLE_STATE_LOW;
+ 116              		.loc 1 27 5
+  28:alarm.c       ****     timer_ocinitpara.ocnidlestate = TIMER_OCN_IDLE_STATE_LOW;
+ 117              		.loc 1 28 5
+  23:alarm.c       ****     timer_ocinitpara.outputnstate = TIMER_CCXN_DISABLE;
+ 118              		.loc 1 23 35 is_stmt 0
+ 119 00ac 8547     		li	a5,1
+ 120 00ae 3EC2     		sw	a5,4(sp)
+  25:alarm.c       ****     timer_ocinitpara.ocnpolarity  = TIMER_OCN_POLARITY_HIGH;
+ 121              		.loc 1 25 35
+ 122 00b0 02C4     		sw	zero,8(sp)
+  27:alarm.c       ****     timer_ocinitpara.ocnidlestate = TIMER_OCN_IDLE_STATE_LOW;
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 4
+
+
+ 123              		.loc 1 27 35
+ 124 00b2 02C6     		sw	zero,12(sp)
+  29:alarm.c       ****     if (ch&0x1) timer_channel_output_config(TIMER1,TIMER_CH_0,&timer_ocinitpara);
+ 125              		.loc 1 29 5 is_stmt 1
+ 126              		.loc 1 29 8 is_stmt 0
+ 127 00b4 D5C0     		beq	s1,zero,.L4
+ 128              		.loc 1 29 17 is_stmt 1 discriminator 1
+ 129 00b6 5000     		addi	a2,sp,4
+ 130 00b8 8145     		li	a1,0
+ 131 00ba 37050040 		li	a0,1073741824
+ 132 00be 97000000 		call	timer_channel_output_config
+ 132      E7800000 
+ 133              	.LVL11:
+  30:alarm.c       ****     if (ch&0x2) timer_channel_output_config(TIMER1,TIMER_CH_1,&timer_ocinitpara);
+ 134              		.loc 1 30 5 discriminator 1
+ 135              		.loc 1 30 8 is_stmt 0 discriminator 1
+ 136 00c6 51E8     		bne	s0,zero,.L5
+ 137              	.L8:
+  31:alarm.c       **** 
+  32:alarm.c       ****     if (ch&0x1) {
+  33:alarm.c       ****         timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_0,11999);
+ 138              		.loc 1 33 9 is_stmt 1
+ 139 00c8 0D66     		li	a2,12288
+ 140 00ca 1306F6ED 		addi	a2,a2,-289
+ 141 00ce 8145     		li	a1,0
+ 142 00d0 37050040 		li	a0,1073741824
+ 143 00d4 97000000 		call	timer_channel_output_pulse_value_config
+ 143      E7800000 
+ 144              	.LVL12:
+  34:alarm.c       ****         timer_channel_output_mode_config(TIMER1,TIMER_CH_0,TIMER_OC_MODE_PWM0);
+ 145              		.loc 1 34 9
+ 146 00dc 13060006 		li	a2,96
+ 147 00e0 8145     		li	a1,0
+ 148 00e2 37050040 		li	a0,1073741824
+ 149 00e6 97000000 		call	timer_channel_output_mode_config
+ 149      E7800000 
+ 150              	.LVL13:
+  35:alarm.c       ****         timer_channel_output_shadow_config(TIMER1,TIMER_CH_0,TIMER_OC_SHADOW_DISABLE);
+ 151              		.loc 1 35 9
+ 152 00ee 0146     		li	a2,0
+ 153 00f0 8145     		li	a1,0
+ 154 00f2 37050040 		li	a0,1073741824
+ 155 00f6 97000000 		call	timer_channel_output_shadow_config
+ 155      E7800000 
+ 156              	.LVL14:
+  36:alarm.c       ****     }
+  37:alarm.c       ****    if (ch&0x2) {
+ 157              		.loc 1 37 4
+ 158              		.loc 1 37 7 is_stmt 0
+ 159 00fe 05CC     		beq	s0,zero,.L9
+ 160              	.L6:
+  38:alarm.c       ****         timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_1,11999);
+ 161              		.loc 1 38 9 is_stmt 1
+ 162 0100 0D66     		li	a2,12288
+ 163 0102 1306F6ED 		addi	a2,a2,-289
+ 164 0106 8545     		li	a1,1
+ 165 0108 37050040 		li	a0,1073741824
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 5
+
+
+ 166 010c 97000000 		call	timer_channel_output_pulse_value_config
+ 166      E7800000 
+ 167              	.LVL15:
+  39:alarm.c       ****         timer_channel_output_mode_config(TIMER1,TIMER_CH_1,TIMER_OC_MODE_PWM0);
+ 168              		.loc 1 39 9
+ 169 0114 13060006 		li	a2,96
+ 170 0118 8545     		li	a1,1
+ 171 011a 37050040 		li	a0,1073741824
+ 172 011e 97000000 		call	timer_channel_output_mode_config
+ 172      E7800000 
+ 173              	.LVL16:
+  40:alarm.c       ****         timer_channel_output_shadow_config(TIMER1,TIMER_CH_1,TIMER_OC_SHADOW_DISABLE);
+ 174              		.loc 1 40 9
+ 175 0126 0146     		li	a2,0
+ 176 0128 8545     		li	a1,1
+ 177 012a 37050040 		li	a0,1073741824
+ 178 012e 97000000 		call	timer_channel_output_shadow_config
+ 178      E7800000 
+ 179              	.LVL17:
+ 180              	.L9:
+  41:alarm.c       ****     }
+  42:alarm.c       ****     
+  43:alarm.c       ****     timer_auto_reload_shadow_enable(TIMER1);
+ 181              		.loc 1 43 5
+ 182 0136 37050040 		li	a0,1073741824
+ 183 013a 97000000 		call	timer_auto_reload_shadow_enable
+ 183      E7800000 
+ 184              	.LVL18:
+  44:alarm.c       ****     timer_enable(TIMER1);
+ 185              		.loc 1 44 5
+ 186 0142 37050040 		li	a0,1073741824
+ 187 0146 97000000 		call	timer_enable
+ 187      E7800000 
+ 188              	.LVL19:
+  45:alarm.c       **** }
+ 189              		.loc 1 45 1 is_stmt 0
+ 190 014e B250     		lw	ra,44(sp)
+ 191              		.cfi_remember_state
+ 192              		.cfi_restore 1
+ 193 0150 2254     		lw	s0,40(sp)
+ 194              		.cfi_restore 8
+ 195 0152 9254     		lw	s1,36(sp)
+ 196              		.cfi_restore 9
+ 197 0154 4561     		addi	sp,sp,48
+ 198              	.LCFI1:
+ 199              		.cfi_def_cfa_offset 0
+ 200 0156 8280     		jr	ra
+ 201              	.L4:
+ 202              	.LCFI2:
+ 203              		.cfi_restore_state
+  30:alarm.c       **** 
+ 204              		.loc 1 30 5 is_stmt 1
+  30:alarm.c       **** 
+ 205              		.loc 1 30 8 is_stmt 0
+ 206 0158 79DC     		beq	s0,zero,.L9
+ 207              	.L5:
+  30:alarm.c       **** 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 6
+
+
+ 208              		.loc 1 30 17 is_stmt 1
+ 209 015a 5000     		addi	a2,sp,4
+ 210 015c 8545     		li	a1,1
+ 211 015e 37050040 		li	a0,1073741824
+ 212 0162 97000000 		call	timer_channel_output_config
+ 212      E7800000 
+ 213              	.LVL20:
+  32:alarm.c       ****         timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_0,11999);
+ 214              		.loc 1 32 5
+  32:alarm.c       ****         timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_0,11999);
+ 215              		.loc 1 32 8 is_stmt 0
+ 216 016a D9D8     		beq	s1,zero,.L6
+ 217 016c B1BF     		j	.L8
+ 218              		.cfi_endproc
+ 219              	.LFE2:
+ 221              		.section	.text.aSet,"ax",@progbits
+ 222              		.align	1
+ 223              		.globl	aSet
+ 225              	aSet:
+ 226              	.LFB3:
+  46:alarm.c       **** 
+  47:alarm.c       **** void aSet(int on){
+ 227              		.loc 1 47 18 is_stmt 1
+ 228              		.cfi_startproc
+ 229              	.LVL21:
+  48:alarm.c       ****     timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_1,on);
+ 230              		.loc 1 48 5
+ 231 0000 2A86     		mv	a2,a0
+ 232 0002 8545     		li	a1,1
+ 233 0004 37050040 		li	a0,1073741824
+ 234              	.LVL22:
+ 235 0008 17030000 		tail	timer_channel_output_pulse_value_config
+ 235      67000300 
+ 236              	.LVL23:
+ 237              		.cfi_endproc
+ 238              	.LFE3:
+ 240              		.text
+ 241              	.Letext0:
+ 242              		.file 2 "c:\\kth\\digtal teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 243              		.file 3 "c:\\kth\\digtal teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 244              		.file 4 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_timer.h"
+ 245              		.file 5 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_rcu.h"
+ 246              		.file 6 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_gpio.h"
+ 247              		.file 7 "./../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 alarm.c
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:13     .text.alnit:0000000000000000 alnit
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:17     .text.alnit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:19     .text.alnit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:20     .text.alnit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:21     .text.alnit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:22     .text.alnit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:23     .text.alnit:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:25     .text.alnit:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:27     .text.alnit:0000000000000004 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:30     .text.alnit:0000000000000006 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:33     .text.alnit:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:35     .text.alnit:000000000000000e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:36     .text.alnit:000000000000000e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:38     .text.alnit:000000000000000e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:41     .text.alnit:0000000000000016 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:46     .text.alnit:0000000000000026 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:47     .text.alnit:0000000000000026 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:49     .text.alnit:0000000000000028 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:58     .text.alnit:000000000000003e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:60     .text.alnit:0000000000000040 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:62     .text.alnit:0000000000000042 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:71     .text.alnit:0000000000000058 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:75     .text.alnit:0000000000000064 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:79     .text.alnit:0000000000000070 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:83     .text.alnit:000000000000007a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:84     .text.alnit:000000000000007a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:85     .text.alnit:000000000000007a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:86     .text.alnit:000000000000007a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:89     .text.alnit:0000000000000080 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:92     .text.alnit:0000000000000086 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:95     .text.alnit:000000000000008c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:97     .text.alnit:000000000000008e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:99     .text.alnit:0000000000000092 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:100    .text.alnit:0000000000000092 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:101    .text.alnit:0000000000000092 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:103    .text.alnit:0000000000000096 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:104    .text.alnit:0000000000000096 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:106    .text.alnit:000000000000009a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:109    .text.alnit:00000000000000a2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:113    .text.alnit:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:114    .text.alnit:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:115    .text.alnit:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:116    .text.alnit:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:117    .text.alnit:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:118    .text.alnit:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:119    .text.alnit:00000000000000ac .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:122    .text.alnit:00000000000000b0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:124    .text.alnit:00000000000000b2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:126    .text.alnit:00000000000000b4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:127    .text.alnit:00000000000000b4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:129    .text.alnit:00000000000000b6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:135    .text.alnit:00000000000000c6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:136    .text.alnit:00000000000000c6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:139    .text.alnit:00000000000000c8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:146    .text.alnit:00000000000000dc .L0 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 8
+
+
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:152    .text.alnit:00000000000000ee .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:158    .text.alnit:00000000000000fe .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:159    .text.alnit:00000000000000fe .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:162    .text.alnit:0000000000000100 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:169    .text.alnit:0000000000000114 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:175    .text.alnit:0000000000000126 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:182    .text.alnit:0000000000000136 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:186    .text.alnit:0000000000000142 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:190    .text.alnit:000000000000014e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:191    .text.alnit:0000000000000150 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:192    .text.alnit:0000000000000150 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:194    .text.alnit:0000000000000152 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:196    .text.alnit:0000000000000154 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:199    .text.alnit:0000000000000156 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:203    .text.alnit:0000000000000158 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:205    .text.alnit:0000000000000158 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:206    .text.alnit:0000000000000158 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:209    .text.alnit:000000000000015a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:215    .text.alnit:000000000000016a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:216    .text.alnit:000000000000016a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:218    .text.alnit:000000000000016e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:225    .text.aSet:0000000000000000 aSet
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:228    .text.aSet:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:230    .text.aSet:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:231    .text.aSet:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:237    .text.aSet:0000000000000010 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:221    .text.alnit:000000000000016e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:240    .text.aSet:0000000000000010 .L0 
+                     .debug_frame:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:56     .text.alnit:000000000000003e .L2
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:69     .text.alnit:0000000000000058 .L3
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:201    .text.alnit:0000000000000158 .L4
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:207    .text.alnit:000000000000015a .L5
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:180    .text.alnit:0000000000000136 .L9
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:160    .text.alnit:0000000000000100 .L6
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:137    .text.alnit:00000000000000c8 .L8
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1129   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1544   .debug_str:0000000000000000 .LASF83
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1636   .debug_str:000000000000030c .LASF84
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1588   .debug_str:0000000000000191 .LASF85
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1534   .debug_ranges:0000000000000000 .Ldebug_ranges0
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1542   .debug_line:0000000000000000 .Ldebug_line0
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1642   .debug_str:0000000000000334 .LASF0
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1546   .debug_str:0000000000000088 .LASF1
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1716   .debug_str:0000000000000527 .LASF4
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1626   .debug_str:00000000000002cb .LASF2
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1604   .debug_str:000000000000021d .LASF3
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1564   .debug_str:00000000000000e7 .LASF5
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1652   .debug_str:000000000000036d .LASF6
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1592   .debug_str:00000000000001e0 .LASF7
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1560   .debug_str:00000000000000d4 .LASF8
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1674   .debug_str:0000000000000400 .LASF9
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1558   .debug_str:00000000000000c6 .LASF10
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1638   .debug_str:0000000000000314 .LASF11
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1574   .debug_str:000000000000014c .LASF12
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1644   .debug_str:0000000000000341 .LASF13
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1640   .debug_str:000000000000032b .LASF14
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 9
+
+
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1666   .debug_str:00000000000003d9 .LASF86
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1576   .debug_str:0000000000000154 .LASF15
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1668   .debug_str:00000000000003e9 .LASF16
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1710   .debug_str:00000000000004f6 .LASF17
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1706   .debug_str:00000000000004e1 .LASF18
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1690   .debug_str:000000000000045d .LASF19
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1610   .debug_str:000000000000025a .LASF20
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1612   .debug_str:0000000000000265 .LASF21
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1614   .debug_str:0000000000000270 .LASF22
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1616   .debug_str:000000000000027b .LASF23
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1618   .debug_str:0000000000000286 .LASF24
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1620   .debug_str:0000000000000291 .LASF25
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1586   .debug_str:0000000000000187 .LASF26
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1596   .debug_str:00000000000001f2 .LASF27
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1598   .debug_str:00000000000001fb .LASF28
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1686   .debug_str:0000000000000447 .LASF29
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1688   .debug_str:0000000000000452 .LASF30
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1692   .debug_str:0000000000000467 .LASF31
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1694   .debug_str:0000000000000471 .LASF32
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1660   .debug_str:00000000000003b6 .LASF33
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1662   .debug_str:00000000000003bf .LASF34
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1582   .debug_str:0000000000000175 .LASF35
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1584   .debug_str:000000000000017e .LASF36
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1634   .debug_str:0000000000000303 .LASF37
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1650   .debug_str:0000000000000365 .LASF38
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1712   .debug_str:00000000000004fe .LASF39
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1562   .debug_str:00000000000000df .LASF40
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1672   .debug_str:00000000000003f9 .LASF41
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1548   .debug_str:0000000000000094 .LASF42
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1550   .debug_str:000000000000009e .LASF43
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1552   .debug_str:00000000000000a8 .LASF44
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1554   .debug_str:00000000000000b2 .LASF45
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1556   .debug_str:00000000000000bc .LASF46
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1630   .debug_str:00000000000002f1 .LASF47
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1632   .debug_str:00000000000002fa .LASF48
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1608   .debug_str:000000000000024f .LASF49
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1594   .debug_str:00000000000001e9 .LASF50
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1684   .debug_str:000000000000043c .LASF51
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1648   .debug_str:000000000000035b .LASF52
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1600   .debug_str:0000000000000204 .LASF53
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1664   .debug_str:00000000000003c8 .LASF54
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1670   .debug_str:00000000000003f2 .LASF55
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1570   .debug_str:000000000000012f .LASF56
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1696   .debug_str:000000000000047b .LASF57
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1568   .debug_str:0000000000000118 .LASF58
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1580   .debug_str:0000000000000169 .LASF59
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1682   .debug_str:000000000000042f .LASF60
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1700   .debug_str:00000000000004ad .LASF61
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1708   .debug_str:00000000000004ea .LASF62
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1578   .debug_str:000000000000015d .LASF63
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1676   .debug_str:0000000000000412 .LASF64
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1658   .debug_str:000000000000039c .LASF65
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1622   .debug_str:000000000000029c .LASF66
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1656   .debug_str:0000000000000397 .LASF67
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:226    .text.aSet:0000000000000000 .LFB3
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:238    .text.aSet:0000000000000010 .LFE3
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1464   .debug_loc:0000000000000000 .LLST2
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 10
+
+
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:236    .text.aSet:0000000000000010 .LVL23
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1680   .debug_str:0000000000000429 .LASF68
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:14     .text.alnit:0000000000000000 .LFB2
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:219    .text.alnit:000000000000016e .LFE2
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1482   .debug_loc:000000000000002c .LLST0
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1505   .debug_loc:0000000000000064 .LLST1
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1646   .debug_str:000000000000034a .LASF69
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1572   .debug_str:000000000000013d .LASF70
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:39     .text.alnit:0000000000000016 .LVL2
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:44     .text.alnit:0000000000000026 .LVL3
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:55     .text.alnit:000000000000003e .LVL4
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:68     .text.alnit:0000000000000058 .LVL5
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:73     .text.alnit:0000000000000064 .LVL6
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:77     .text.alnit:0000000000000070 .LVL7
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:81     .text.alnit:000000000000007a .LVL8
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:107    .text.alnit:00000000000000a2 .LVL9
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:111    .text.alnit:00000000000000ac .LVL10
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:133    .text.alnit:00000000000000c6 .LVL11
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:144    .text.alnit:00000000000000dc .LVL12
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:150    .text.alnit:00000000000000ee .LVL13
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:156    .text.alnit:00000000000000fe .LVL14
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:167    .text.alnit:0000000000000114 .LVL15
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:173    .text.alnit:0000000000000126 .LVL16
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:179    .text.alnit:0000000000000136 .LVL17
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:184    .text.alnit:0000000000000142 .LVL18
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:188    .text.alnit:000000000000014e .LVL19
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:213    .text.alnit:000000000000016a .LVL20
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1606   .debug_str:0000000000000227 .LASF71
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1628   .debug_str:00000000000002d9 .LASF72
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1678   .debug_str:000000000000041f .LASF73
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1704   .debug_str:00000000000004d4 .LASF74
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1654   .debug_str:0000000000000380 .LASF75
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1590   .debug_str:00000000000001d5 .LASF76
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1566   .debug_str:00000000000000f2 .LASF77
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1702   .debug_str:00000000000004b8 .LASF78
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1714   .debug_str:0000000000000506 .LASF79
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1624   .debug_str:00000000000002a8 .LASF80
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1698   .debug_str:000000000000048d .LASF81
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:1602   .debug_str:0000000000000210 .LASF82
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:229    .text.aSet:0000000000000000 .LVL21
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:234    .text.aSet:0000000000000008 .LVL22
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:24     .text.alnit:0000000000000002 .LCFI0
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:198    .text.alnit:0000000000000156 .LCFI1
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:202    .text.alnit:0000000000000158 .LCFI2
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:18     .text.alnit:0000000000000000 .LVL0
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:31     .text.alnit:000000000000000a .LVL1
+C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s:249    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_init
+timer_deinit
+timer_struct_para_init
+timer_init
+timer_channel_output_struct_para_init
+timer_channel_output_config
+timer_channel_output_pulse_value_config
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccswJdiF.s 			page 11
+
+
+timer_channel_output_mode_config
+timer_channel_output_shadow_config
+timer_auto_reload_shadow_enable
+timer_enable

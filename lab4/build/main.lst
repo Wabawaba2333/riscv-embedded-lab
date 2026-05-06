@@ -1,0 +1,586 @@
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 1
+
+
+   1              		.file	"main.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.startup.main,"ax",@progbits
+  10              		.align	1
+  11              		.globl	main
+  13              	main:
+  14              	.LFB2:
+  15              		.file 1 "main.c"
+   1:main.c        **** #include "gd32vf103.h"
+   2:main.c        **** #include "drivers.h"
+   3:main.c        **** #include "adc.h"
+   4:main.c        **** #include "dac.h"
+   5:main.c        **** 
+   6:main.c        **** int main(void){
+  16              		.loc 1 6 15
+  17              		.cfi_startproc
+   7:main.c        ****     int ms=0, s=0, key, pKey=-1, c=0, idle=0, adcr, tmpr;
+  18              		.loc 1 7 5
+  19              	.LVL0:
+   8:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+  20              		.loc 1 8 5
+   6:main.c        ****     int ms=0, s=0, key, pKey=-1, c=0, idle=0, adcr, tmpr;
+  21              		.loc 1 6 15 is_stmt 0
+  22 0000 5971     		addi	sp,sp,-112
+  23              	.LCFI0:
+  24              		.cfi_def_cfa_offset 112
+  25              		.loc 1 8 9
+  26 0002 B7050000 		lui	a1,%hi(.LANCHOR0)
+  27 0006 13060004 		li	a2,64
+  28 000a 93850500 		addi	a1,a1,%lo(.LANCHOR0)
+  29 000e 0A85     		mv	a0,sp
+   6:main.c        ****     int ms=0, s=0, key, pKey=-1, c=0, idle=0, adcr, tmpr;
+  30              		.loc 1 6 15
+  31 0010 86D6     		sw	ra,108(sp)
+  32 0012 A2D4     		sw	s0,104(sp)
+  33 0014 CAD0     		sw	s2,96(sp)
+  34 0016 CECE     		sw	s3,92(sp)
+  35 0018 D6CA     		sw	s5,84(sp)
+  36 001a DAC8     		sw	s6,80(sp)
+  37 001c DEC6     		sw	s7,76(sp)
+  38 001e E2C4     		sw	s8,72(sp)
+  39 0020 A6D2     		sw	s1,100(sp)
+  40 0022 D2CC     		sw	s4,88(sp)
+  41              		.cfi_offset 1, -4
+  42              		.cfi_offset 8, -8
+  43              		.cfi_offset 18, -16
+  44              		.cfi_offset 19, -20
+  45              		.cfi_offset 21, -28
+  46              		.cfi_offset 22, -32
+  47              		.cfi_offset 23, -36
+  48              		.cfi_offset 24, -40
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 2
+
+
+  49              		.cfi_offset 9, -12
+  50              		.cfi_offset 20, -24
+  51              		.loc 1 8 9
+  52 0024 97000000 		call	memcpy
+  52      E7800000 
+  53              	.LVL1:
+   9:main.c        **** 
+  10:main.c        ****     t5omsi();                                     // Initialize timer5 1kHz
+  54              		.loc 1 10 5 is_stmt 1
+  55 002c 97000000 		call	t5omsi
+  55      E7800000 
+  56              	.LVL2:
+  11:main.c        ****     colinit();                                    // Initialize column toolbox
+  57              		.loc 1 11 5
+  58 0034 97000000 		call	colinit
+  58      E7800000 
+  59              	.LVL3:
+  12:main.c        ****     l88init();                                    // Initialize 8*8 led toolbox
+  60              		.loc 1 12 5
+  61 003c 97000000 		call	l88init
+  61      E7800000 
+  62              	.LVL4:
+  13:main.c        ****     keyinit();                                    // Initialize keyboard toolbox
+  63              		.loc 1 13 5
+  64 0044 97000000 		call	keyinit
+  64      E7800000 
+  65              	.LVL5:
+  14:main.c        ****     ADC3powerUpInit(0);                           // Initialize ADC0, Ch3, GPIOA3
+  66              		.loc 1 14 5
+  67 004c 0145     		li	a0,0
+  15:main.c        ****     DAC0powerUpInit();                            // Initialize DAC0, GPIOA4.
+  16:main.c        **** 
+  17:main.c        ****     while (1) {
+  18:main.c        ****         idle++;                                   // Manage Async events
+  19:main.c        **** 
+  20:main.c        ****         if (adc_flag_get(ADC0,ADC_FLAG_EOC)==SET) { // ...ADC done?
+  68              		.loc 1 20 13 is_stmt 0
+  69 004e 37240140 		li	s0,1073815552
+  14:main.c        ****     ADC3powerUpInit(0);                           // Initialize ADC0, Ch3, GPIOA3
+  70              		.loc 1 14 5
+  71 0052 97000000 		call	ADC3powerUpInit
+  71      E7800000 
+  72              	.LVL6:
+  15:main.c        ****     DAC0powerUpInit();                            // Initialize DAC0, GPIOA4.
+  73              		.loc 1 15 5 is_stmt 1
+   7:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+  74              		.loc 1 7 34 is_stmt 0
+  75 005a 8149     		li	s3,0
+  15:main.c        ****     DAC0powerUpInit();                            // Initialize DAC0, GPIOA4.
+  76              		.loc 1 15 5
+  77 005c 97000000 		call	DAC0powerUpInit
+  77      E7800000 
+  78              	.LVL7:
+   7:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+  79              		.loc 1 7 25
+  80 0064 7D5C     		li	s8,-1
+   7:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 3
+
+
+  81              		.loc 1 7 15
+  82 0066 814A     		li	s5,0
+   7:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+  83              		.loc 1 7 9
+  84 0068 0149     		li	s2,0
+  85              		.loc 1 20 13
+  86 006a 13040440 		addi	s0,s0,1024
+  87              		.loc 1 20 12
+  88 006e 054B     		li	s6,1
+  21:main.c        ****             adcr = adc_regular_data_read(ADC0);   // ........get data
+  22:main.c        ****             l88mem(4,adcr&0xFF);                  // ........DBG 8*8
+  23:main.c        ****             l88mem(5,adcr>>8);                    // ........row 4/5
+  24:main.c        ****             DAC0set(adcr);                        // ........put data!
+  25:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC);   // ........clear IF
+  26:main.c        ****         }
+  27:main.c        ****  
+  28:main.c        ****         if (t5expq()) {                           // Manage periodic tasks
+  29:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
+  30:main.c        ****             ms++;                                 // ...One second heart beat
+  31:main.c        ****             if (ms==1000){
+  89              		.loc 1 31 16
+  90 0070 930B803E 		li	s7,1000
+  91              	.LVL8:
+  92              	.L7:
+   7:main.c        ****     int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+  93              		.loc 1 7 9
+  94 0074 8144     		li	s1,0
+  95              	.LVL9:
+  96              	.L3:
+  17:main.c        ****         idle++;                                   // Manage Async events
+  97              		.loc 1 17 5 is_stmt 1
+  18:main.c        **** 
+  98              		.loc 1 18 9
+  20:main.c        ****             adcr = adc_regular_data_read(ADC0);   // ........get data
+  99              		.loc 1 20 13 is_stmt 0
+ 100 0076 8945     		li	a1,2
+ 101 0078 2285     		mv	a0,s0
+  18:main.c        **** 
+ 102              		.loc 1 18 13
+ 103 007a 8504     		addi	s1,s1,1
+ 104              	.LVL10:
+  20:main.c        ****             adcr = adc_regular_data_read(ADC0);   // ........get data
+ 105              		.loc 1 20 9 is_stmt 1
+  20:main.c        ****             adcr = adc_regular_data_read(ADC0);   // ........get data
+ 106              		.loc 1 20 13 is_stmt 0
+ 107 007c 97000000 		call	adc_flag_get
+ 107      E7800000 
+ 108              	.LVL11:
+  20:main.c        ****             adcr = adc_regular_data_read(ADC0);   // ........get data
+ 109              		.loc 1 20 12
+ 110 0084 63116505 		bne	a0,s6,.L2
+  21:main.c        ****             l88mem(4,adcr&0xFF);                  // ........DBG 8*8
+ 111              		.loc 1 21 13 is_stmt 1
+  21:main.c        ****             l88mem(4,adcr&0xFF);                  // ........DBG 8*8
+ 112              		.loc 1 21 20 is_stmt 0
+ 113 0088 2285     		mv	a0,s0
+ 114 008a 97000000 		call	adc_regular_data_read
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 4
+
+
+ 114      E7800000 
+ 115              	.LVL12:
+ 116 0092 2A8A     		mv	s4,a0
+ 117              	.LVL13:
+  22:main.c        ****             l88mem(5,adcr>>8);                    // ........row 4/5
+ 118              		.loc 1 22 13 is_stmt 1
+ 119 0094 9375F50F 		andi	a1,a0,0xff
+ 120 0098 1145     		li	a0,4
+ 121              	.LVL14:
+ 122 009a 97000000 		call	l88mem
+ 122      E7800000 
+ 123              	.LVL15:
+  23:main.c        ****             DAC0set(adcr);                        // ........put data!
+ 124              		.loc 1 23 13
+ 125 00a2 93558A40 		srai	a1,s4,8
+ 126 00a6 1545     		li	a0,5
+ 127 00a8 97000000 		call	l88mem
+ 127      E7800000 
+ 128              	.LVL16:
+  24:main.c        ****             adc_flag_clear(ADC0, ADC_FLAG_EOC);   // ........clear IF
+ 129              		.loc 1 24 13
+ 130 00b0 5285     		mv	a0,s4
+ 131 00b2 97000000 		call	DAC0set
+ 131      E7800000 
+ 132              	.LVL17:
+  25:main.c        ****         }
+ 133              		.loc 1 25 13
+ 134 00ba 8945     		li	a1,2
+ 135 00bc 2285     		mv	a0,s0
+ 136 00be 97000000 		call	adc_flag_clear
+ 136      E7800000 
+ 137              	.LVL18:
+ 138              	.L2:
+  28:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
+ 139              		.loc 1 28 9
+  28:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
+ 140              		.loc 1 28 13 is_stmt 0
+ 141 00c6 97000000 		call	t5expq
+ 141      E7800000 
+ 142              	.LVL19:
+  28:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
+ 143              		.loc 1 28 12
+ 144 00ce 45D5     		beq	a0,zero,.L3
+  29:main.c        ****             ms++;                                 // ...One second heart beat
+ 145              		.loc 1 29 13 is_stmt 1
+ 146 00d0 97000000 		call	colset
+ 146      E7800000 
+ 147              	.LVL20:
+  30:main.c        ****             if (ms==1000){
+ 148              		.loc 1 30 15 is_stmt 0
+ 149 00d8 0509     		addi	s2,s2,1
+ 150              	.LVL21:
+  29:main.c        ****             ms++;                                 // ...One second heart beat
+ 151              		.loc 1 29 13
+ 152 00da 97000000 		call	l88row
+ 152      E7800000 
+ 153              	.LVL22:
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 5
+
+
+  30:main.c        ****             if (ms==1000){
+ 154              		.loc 1 30 13 is_stmt 1
+ 155              		.loc 1 31 13
+ 156              		.loc 1 31 16 is_stmt 0
+ 157 00e2 631C7901 		bne	s2,s7,.L4
+  32:main.c        ****               ms=0;
+ 158              		.loc 1 32 15 is_stmt 1
+ 159              	.LVL23:
+  33:main.c        ****               l88mem(0,s++);
+ 160              		.loc 1 33 15
+ 161 00e6 13891A00 		addi	s2,s5,1
+ 162              	.LVL24:
+ 163 00ea D685     		mv	a1,s5
+ 164 00ec 0145     		li	a0,0
+ 165 00ee CA8A     		mv	s5,s2
+ 166 00f0 97000000 		call	l88mem
+ 166      E7800000 
+ 167              	.LVL25:
+  32:main.c        ****               ms=0;
+ 168              		.loc 1 32 17 is_stmt 0
+ 169 00f8 0149     		li	s2,0
+ 170              	.LVL26:
+ 171              	.L4:
+  34:main.c        ****             }
+  35:main.c        ****             if ((key=keyscan())>=0) {             // ...Any key pressed?
+ 172              		.loc 1 35 13 is_stmt 1
+ 173              		.loc 1 35 22 is_stmt 0
+ 174 00fa 97000000 		call	keyscan
+ 174      E7800000 
+ 175              	.LVL27:
+ 176 0102 2A8A     		mv	s4,a0
+ 177              	.LVL28:
+ 178              		.loc 1 35 16
+ 179 0104 63450502 		blt	a0,zero,.L5
+  36:main.c        ****               if (pKey==key) c++; else {c=0; pKey=key;}
+ 180              		.loc 1 36 15 is_stmt 1
+ 181              		.loc 1 36 31 is_stmt 0
+ 182 0108 8509     		addi	s3,s3,1
+ 183              	.LVL29:
+ 184              		.loc 1 36 18
+ 185 010a 6303AC00 		beq	s8,a0,.L6
+ 186              		.loc 1 36 42
+ 187 010e 8149     		li	s3,0
+ 188              	.LVL30:
+ 189              	.L6:
+  37:main.c        ****               l88mem(1,lookUpTbl[key]+(c<<4));
+ 190              		.loc 1 37 15 is_stmt 1
+ 191              		.loc 1 37 33 is_stmt 0
+ 192 0110 9800     		addi	a4,sp,64
+ 193 0112 93172A00 		slli	a5,s4,2
+ 194 0116 BA97     		add	a5,a4,a5
+ 195              		.loc 1 37 15
+ 196 0118 83A707FC 		lw	a5,-64(a5)
+ 197              		.loc 1 37 41
+ 198 011c 93954900 		slli	a1,s3,4
+ 199              		.loc 1 37 15
+ 200 0120 0545     		li	a0,1
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 6
+
+
+ 201              	.LVL31:
+ 202 0122 BE95     		add	a1,a1,a5
+ 203 0124 97000000 		call	l88mem
+ 203      E7800000 
+ 204              	.LVL32:
+ 205 012c 528C     		mv	s8,s4
+ 206              	.LVL33:
+ 207              	.L5:
+  38:main.c        ****             }
+  39:main.c        ****             l88mem(2,idle>>8);                    // ...Performance monitor
+ 208              		.loc 1 39 13 is_stmt 1
+ 209 012e 93D58440 		srai	a1,s1,8
+ 210 0132 0945     		li	a0,2
+ 211 0134 97000000 		call	l88mem
+ 211      E7800000 
+ 212              	.LVL34:
+  40:main.c        ****             l88mem(3,idle); idle=0;
+ 213              		.loc 1 40 13
+ 214 013c A685     		mv	a1,s1
+ 215 013e 0D45     		li	a0,3
+ 216 0140 97000000 		call	l88mem
+ 216      E7800000 
+ 217              	.LVL35:
+ 218              		.loc 1 40 29
+  41:main.c        ****             adc_software_trigger_enable(ADC0,     //Trigger another ADC conversion
+ 219              		.loc 1 41 13
+ 220 0148 8545     		li	a1,1
+ 221 014a 2285     		mv	a0,s0
+ 222 014c 97000000 		call	adc_software_trigger_enable
+ 222      E7800000 
+ 223              	.LVL36:
+ 224 0154 05B7     		j	.L7
+ 225              		.cfi_endproc
+ 226              	.LFE2:
+ 228              		.section	.rodata
+ 229              		.align	2
+ 230              		.set	.LANCHOR0,. + 0
+ 231              	.LC0:
+ 232 0000 01000000 		.word	1
+ 233 0004 04000000 		.word	4
+ 234 0008 07000000 		.word	7
+ 235 000c 0E000000 		.word	14
+ 236 0010 02000000 		.word	2
+ 237 0014 05000000 		.word	5
+ 238 0018 08000000 		.word	8
+ 239 001c 00000000 		.word	0
+ 240 0020 03000000 		.word	3
+ 241 0024 06000000 		.word	6
+ 242 0028 09000000 		.word	9
+ 243 002c 0F000000 		.word	15
+ 244 0030 0A000000 		.word	10
+ 245 0034 0B000000 		.word	11
+ 246 0038 0C000000 		.word	12
+ 247 003c 0D000000 		.word	13
+ 248              		.text
+ 249              	.Letext0:
+ 250              		.file 2 "c:\\kth\\digtal teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 7
+
+
+ 251              		.file 3 "c:\\kth\\digtal teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 252              		.file 4 "drivers.h"
+ 253              		.file 5 "adc.h"
+ 254              		.file 6 "dac.h"
+ 255              		.file 7 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_adc.h"
+ 256              		.file 8 "./../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+ 257              		.file 9 "./../../firmware/GD32VF103_standard_peripheral/gd32vf103.h"
+ 258              		.file 10 "<built-in>"
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:13     .text.startup.main:0000000000000000 main
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:17     .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:18     .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:20     .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:21     .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:22     .text.startup.main:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:24     .text.startup.main:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:26     .text.startup.main:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:31     .text.startup.main:0000000000000010 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:41     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:42     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:43     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:44     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:45     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:46     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:47     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:48     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:49     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:50     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:52     .text.startup.main:0000000000000024 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:55     .text.startup.main:000000000000002c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:58     .text.startup.main:0000000000000034 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:61     .text.startup.main:000000000000003c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:64     .text.startup.main:0000000000000044 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:67     .text.startup.main:000000000000004c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:69     .text.startup.main:000000000000004e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:71     .text.startup.main:0000000000000052 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:74     .text.startup.main:000000000000005a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:75     .text.startup.main:000000000000005a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:77     .text.startup.main:000000000000005c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:80     .text.startup.main:0000000000000064 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:82     .text.startup.main:0000000000000066 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:84     .text.startup.main:0000000000000068 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:86     .text.startup.main:000000000000006a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:88     .text.startup.main:000000000000006e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:90     .text.startup.main:0000000000000070 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:94     .text.startup.main:0000000000000074 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:98     .text.startup.main:0000000000000076 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:99     .text.startup.main:0000000000000076 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:100    .text.startup.main:0000000000000076 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:103    .text.startup.main:000000000000007a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:106    .text.startup.main:000000000000007c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:107    .text.startup.main:000000000000007c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:110    .text.startup.main:0000000000000084 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:112    .text.startup.main:0000000000000088 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:113    .text.startup.main:0000000000000088 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:119    .text.startup.main:0000000000000094 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:125    .text.startup.main:00000000000000a2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:130    .text.startup.main:00000000000000b0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:134    .text.startup.main:00000000000000ba .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:140    .text.startup.main:00000000000000c6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:141    .text.startup.main:00000000000000c6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:144    .text.startup.main:00000000000000ce .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:146    .text.startup.main:00000000000000d0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:149    .text.startup.main:00000000000000d8 .L0 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 9
+
+
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:152    .text.startup.main:00000000000000da .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:155    .text.startup.main:00000000000000e2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:156    .text.startup.main:00000000000000e2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:157    .text.startup.main:00000000000000e2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:160    .text.startup.main:00000000000000e6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:161    .text.startup.main:00000000000000e6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:169    .text.startup.main:00000000000000f8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:173    .text.startup.main:00000000000000fa .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:174    .text.startup.main:00000000000000fa .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:179    .text.startup.main:0000000000000104 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:181    .text.startup.main:0000000000000108 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:182    .text.startup.main:0000000000000108 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:185    .text.startup.main:000000000000010a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:187    .text.startup.main:000000000000010e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:191    .text.startup.main:0000000000000110 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:192    .text.startup.main:0000000000000110 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:196    .text.startup.main:0000000000000118 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:198    .text.startup.main:000000000000011c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:200    .text.startup.main:0000000000000120 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:209    .text.startup.main:000000000000012e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:214    .text.startup.main:000000000000013c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:219    .text.startup.main:0000000000000148 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:220    .text.startup.main:0000000000000148 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:225    .text.startup.main:0000000000000156 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:230    .rodata:0000000000000000 .LANCHOR0
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:228    .text.startup.main:0000000000000156 .L0 
+                     .debug_frame:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:138    .text.startup.main:00000000000000c6 .L2
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:96     .text.startup.main:0000000000000076 .L3
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:171    .text.startup.main:00000000000000fa .L4
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:207    .text.startup.main:000000000000012e .L5
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:189    .text.startup.main:0000000000000110 .L6
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:92     .text.startup.main:0000000000000074 .L7
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:806    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1371   .debug_str:000000000000017b .LASF35
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1355   .debug_str:0000000000000138 .LASF36
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1381   .debug_str:0000000000000229 .LASF37
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1293   .debug_ranges:0000000000000000 .Ldebug_ranges0
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1299   .debug_line:0000000000000000 .Ldebug_line0
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1339   .debug_str:00000000000000d8 .LASF0
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1379   .debug_str:000000000000021d .LASF1
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1303   .debug_str:0000000000000008 .LASF6
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1315   .debug_str:0000000000000057 .LASF2
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1365   .debug_str:0000000000000164 .LASF3
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1309   .debug_str:0000000000000037 .LASF4
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1307   .debug_str:000000000000002e .LASF5
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1329   .debug_str:00000000000000a4 .LASF7
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1317   .debug_str:0000000000000065 .LASF8
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1353   .debug_str:000000000000012a .LASF9
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1383   .debug_str:000000000000026b .LASF10
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1343   .debug_str:00000000000000ec .LASF11
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1373   .debug_str:0000000000000203 .LASF12
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1359   .debug_str:0000000000000146 .LASF38
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1319   .debug_str:0000000000000077 .LASF13
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1377   .debug_str:0000000000000211 .LASF14
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1333   .debug_str:00000000000000b6 .LASF39
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:14     .text.startup.main:0000000000000000 .LFB2
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 10
+
+
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:226    .text.startup.main:0000000000000156 .LFE2
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1130   .debug_loc:0000000000000000 .LLST0
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1143   .debug_loc:0000000000000021 .LLST1
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1174   .debug_loc:000000000000006f .LLST2
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1194   .debug_loc:00000000000000a4 .LLST3
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1327   .debug_str:000000000000009f .LASF15
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1205   .debug_loc:00000000000000c2 .LLST4
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1230   .debug_loc:0000000000000103 .LLST5
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1311   .debug_str:000000000000004a .LASF16
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1252   .debug_loc:000000000000013a .LLST6
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1369   .debug_str:0000000000000176 .LASF17
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1269   .debug_loc:0000000000000165 .LLST7
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1375   .debug_str:000000000000020c .LASF40
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1323   .debug_str:000000000000008d .LASF18
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:53     .text.startup.main:000000000000002c .LVL1
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:56     .text.startup.main:0000000000000034 .LVL2
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:59     .text.startup.main:000000000000003c .LVL3
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:62     .text.startup.main:0000000000000044 .LVL4
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:65     .text.startup.main:000000000000004c .LVL5
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:72     .text.startup.main:000000000000005a .LVL6
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:78     .text.startup.main:0000000000000064 .LVL7
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:108    .text.startup.main:0000000000000084 .LVL11
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:115    .text.startup.main:0000000000000092 .LVL12
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:123    .text.startup.main:00000000000000a2 .LVL15
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:128    .text.startup.main:00000000000000b0 .LVL16
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:132    .text.startup.main:00000000000000ba .LVL17
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:137    .text.startup.main:00000000000000c6 .LVL18
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:142    .text.startup.main:00000000000000ce .LVL19
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:147    .text.startup.main:00000000000000d8 .LVL20
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:153    .text.startup.main:00000000000000e2 .LVL22
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:167    .text.startup.main:00000000000000f8 .LVL25
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:175    .text.startup.main:0000000000000102 .LVL27
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:204    .text.startup.main:000000000000012c .LVL32
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:212    .text.startup.main:000000000000013c .LVL34
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:217    .text.startup.main:0000000000000148 .LVL35
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:223    .text.startup.main:0000000000000154 .LVL36
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1357   .debug_str:000000000000013f .LASF41
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1345   .debug_str:00000000000000f4 .LASF42
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1341   .debug_str:00000000000000e5 .LASF19
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1347   .debug_str:0000000000000105 .LASF20
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1301   .debug_str:0000000000000000 .LASF21
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1367   .debug_str:000000000000016e .LASF22
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1321   .debug_str:000000000000007d .LASF23
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1335   .debug_str:00000000000000bb .LASF24
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1337   .debug_str:00000000000000cb .LASF25
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1349   .debug_str:000000000000010d .LASF26
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1351   .debug_str:0000000000000123 .LASF27
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1325   .debug_str:0000000000000097 .LASF28
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1385   .debug_str:0000000000000282 .LASF29
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1361   .debug_str:0000000000000156 .LASF30
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1331   .debug_str:00000000000000af .LASF31
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1363   .debug_str:000000000000015d .LASF32
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1313   .debug_str:000000000000004f .LASF33
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:1305   .debug_str:0000000000000012 .LASF34
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:23     .text.startup.main:0000000000000002 .LCFI0
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:19     .text.startup.main:0000000000000000 .LVL0
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:91     .text.startup.main:0000000000000074 .LVL8
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s 			page 11
+
+
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:95     .text.startup.main:0000000000000076 .LVL9
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:150    .text.startup.main:00000000000000da .LVL21
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:159    .text.startup.main:00000000000000e6 .LVL23
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:170    .text.startup.main:00000000000000fa .LVL26
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:162    .text.startup.main:00000000000000ea .LVL24
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:177    .text.startup.main:0000000000000104 .LVL28
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:201    .text.startup.main:0000000000000122 .LVL31
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:188    .text.startup.main:0000000000000110 .LVL30
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:206    .text.startup.main:000000000000012e .LVL33
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:183    .text.startup.main:000000000000010a .LVL29
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:117    .text.startup.main:0000000000000094 .LVL13
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:121    .text.startup.main:000000000000009a .LVL14
+C:\Users\zanil\AppData\Local\Temp\ccSpX1Ft.s:260    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+memcpy
+t5omsi
+colinit
+l88init
+keyinit
+ADC3powerUpInit
+DAC0powerUpInit
+adc_flag_get
+adc_regular_data_read
+l88mem
+DAC0set
+adc_flag_clear
+t5expq
+colset
+l88row
+keyscan
+adc_software_trigger_enable

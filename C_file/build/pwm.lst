@@ -1,0 +1,968 @@
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 1
+
+
+   1              		.file	"pwm.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.T1powerUpInitPWM,"ax",@progbits
+  10              		.align	1
+  11              		.globl	T1powerUpInitPWM
+  13              	T1powerUpInitPWM:
+  14              	.LFB2:
+  15              		.file 1 "pwm.c"
+   1:pwm.c         **** #include "pwm.h"
+   2:pwm.c         **** 
+   3:pwm.c         **** void T1powerUpInitPWM(uint16_t ch){
+  16              		.loc 1 3 35
+  17              		.cfi_startproc
+  18              	.LVL0:
+   4:pwm.c         ****     timer_oc_parameter_struct timer_ocinitpara;
+  19              		.loc 1 4 5
+   5:pwm.c         ****     timer_parameter_struct timer_initpara;
+  20              		.loc 1 5 5
+   6:pwm.c         ****     rcu_periph_clock_enable(RCU_GPIOA);
+  21              		.loc 1 6 5
+   3:pwm.c         ****     timer_oc_parameter_struct timer_ocinitpara;
+  22              		.loc 1 3 35 is_stmt 0
+  23 0000 3971     		addi	sp,sp,-64
+  24              	.LCFI0:
+  25              		.cfi_def_cfa_offset 64
+  26 0002 22DC     		sw	s0,56(sp)
+  27              		.cfi_offset 8, -8
+  28 0004 2A84     		mv	s0,a0
+  29              		.loc 1 6 5
+  30 0006 13052060 		li	a0,1538
+  31              	.LVL1:
+   3:pwm.c         ****     timer_oc_parameter_struct timer_ocinitpara;
+  32              		.loc 1 3 35
+  33 000a 06DE     		sw	ra,60(sp)
+  34 000c 4ED6     		sw	s3,44(sp)
+  35 000e 26DA     		sw	s1,52(sp)
+  36 0010 4AD8     		sw	s2,48(sp)
+  37              		.cfi_offset 1, -4
+  38              		.cfi_offset 19, -20
+  39              		.cfi_offset 9, -12
+  40              		.cfi_offset 18, -16
+  41              		.loc 1 6 5
+  42 0012 97000000 		call	rcu_periph_clock_enable
+  42      E7800000 
+  43              	.LVL2:
+   7:pwm.c         ****     rcu_periph_clock_enable(RCU_AF);
+  44              		.loc 1 7 5 is_stmt 1
+  45 001a 13050060 		li	a0,1536
+  46 001e 93791400 		andi	s3,s0,1
+  47 0022 97000000 		call	rcu_periph_clock_enable
+  47      E7800000 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 2
+
+
+  48              	.LVL3:
+   8:pwm.c         ****     if (ch&0x1) gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
+  49              		.loc 1 8 5
+  50              		.loc 1 8 8 is_stmt 0
+  51 002a 638D0900 		beq	s3,zero,.L2
+  52              		.loc 1 8 17 is_stmt 1 discriminator 1
+  53 002e 37150140 		li	a0,1073811456
+  54 0032 8546     		li	a3,1
+  55 0034 0D46     		li	a2,3
+  56 0036 E145     		li	a1,24
+  57 0038 13050580 		addi	a0,a0,-2048
+  58 003c 97000000 		call	gpio_init
+  58      E7800000 
+  59              	.LVL4:
+  60              	.L2:
+   9:pwm.c         ****     if (ch&0x2) gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_1);
+  61              		.loc 1 9 5
+  62 0044 13792400 		andi	s2,s0,2
+  63              		.loc 1 9 8 is_stmt 0
+  64 0048 630D0900 		beq	s2,zero,.L3
+  65              		.loc 1 9 17 is_stmt 1 discriminator 1
+  66 004c 37150140 		li	a0,1073811456
+  67 0050 8946     		li	a3,2
+  68 0052 0D46     		li	a2,3
+  69 0054 E145     		li	a1,24
+  70 0056 13050580 		addi	a0,a0,-2048
+  71 005a 97000000 		call	gpio_init
+  71      E7800000 
+  72              	.LVL5:
+  73              	.L3:
+  10:pwm.c         ****     if (ch&0x4) gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
+  74              		.loc 1 10 5
+  75 0062 93744400 		andi	s1,s0,4
+  76              		.loc 1 10 8 is_stmt 0
+  77 0066 81CC     		beq	s1,zero,.L4
+  78              		.loc 1 10 17 is_stmt 1 discriminator 1
+  79 0068 37150140 		li	a0,1073811456
+  80 006c 9146     		li	a3,4
+  81 006e 0D46     		li	a2,3
+  82 0070 E145     		li	a1,24
+  83 0072 13050580 		addi	a0,a0,-2048
+  84 0076 97000000 		call	gpio_init
+  84      E7800000 
+  85              	.LVL6:
+  86              	.L4:
+  11:pwm.c         ****     if (ch&0x8) gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_3);
+  87              		.loc 1 11 5
+  88 007e 2188     		andi	s0,s0,8
+  89              		.loc 1 11 8 is_stmt 0
+  90 0080 01CC     		beq	s0,zero,.L5
+  91              		.loc 1 11 17 is_stmt 1 discriminator 1
+  92 0082 37150140 		li	a0,1073811456
+  93 0086 A146     		li	a3,8
+  94 0088 0D46     		li	a2,3
+  95 008a E145     		li	a1,24
+  96 008c 13050580 		addi	a0,a0,-2048
+  97 0090 97000000 		call	gpio_init
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 3
+
+
+  97      E7800000 
+  98              	.LVL7:
+  99              	.L5:
+  12:pwm.c         ****     rcu_periph_clock_enable(RCU_TIMER1);
+ 100              		.loc 1 12 5
+ 101 0098 13050070 		li	a0,1792
+ 102 009c 97000000 		call	rcu_periph_clock_enable
+ 102      E7800000 
+ 103              	.LVL8:
+  13:pwm.c         **** 
+  14:pwm.c         ****     timer_deinit(TIMER1);
+ 104              		.loc 1 14 5
+ 105 00a4 37050040 		li	a0,1073741824
+ 106 00a8 97000000 		call	timer_deinit
+ 106      E7800000 
+ 107              	.LVL9:
+  15:pwm.c         ****     timer_struct_para_init(&timer_initpara);
+ 108              		.loc 1 15 5
+ 109 00b0 0808     		addi	a0,sp,16
+ 110 00b2 97000000 		call	timer_struct_para_init
+ 110      E7800000 
+ 111              	.LVL10:
+  16:pwm.c         ****     timer_initpara.prescaler         = 107;
+ 112              		.loc 1 16 5
+  17:pwm.c         ****     timer_initpara.alignedmode       = TIMER_COUNTER_EDGE;
+ 113              		.loc 1 17 5
+  18:pwm.c         ****     timer_initpara.counterdirection  = TIMER_COUNTER_UP;
+ 114              		.loc 1 18 5
+  16:pwm.c         ****     timer_initpara.prescaler         = 107;
+ 115              		.loc 1 16 38 is_stmt 0
+ 116 00ba 9307B006 		li	a5,107
+ 117 00be 3EC8     		sw	a5,16(sp)
+  19:pwm.c         ****     timer_initpara.period            = 15999;
+ 118              		.loc 1 19 38
+ 119 00c0 9167     		li	a5,16384
+ 120 00c2 9387F7E7 		addi	a5,a5,-385
+  20:pwm.c         ****     timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
+  21:pwm.c         ****     timer_initpara.repetitioncounter = 0;
+  22:pwm.c         ****     timer_init(TIMER1, &timer_initpara);
+ 121              		.loc 1 22 5
+ 122 00c6 0C08     		addi	a1,sp,16
+ 123 00c8 37050040 		li	a0,1073741824
+  19:pwm.c         ****     timer_initpara.period            = 15999;
+ 124              		.loc 1 19 38
+ 125 00cc 3ECC     		sw	a5,24(sp)
+  18:pwm.c         ****     timer_initpara.period            = 15999;
+ 126              		.loc 1 18 38
+ 127 00ce 231A0100 		sh	zero,20(sp)
+  19:pwm.c         ****     timer_initpara.period            = 15999;
+ 128              		.loc 1 19 5 is_stmt 1
+  20:pwm.c         ****     timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
+ 129              		.loc 1 20 5
+  20:pwm.c         ****     timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
+ 130              		.loc 1 20 38 is_stmt 0
+ 131 00d2 231E0100 		sh	zero,28(sp)
+  21:pwm.c         ****     timer_init(TIMER1, &timer_initpara);
+ 132              		.loc 1 21 5 is_stmt 1
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 4
+
+
+  21:pwm.c         ****     timer_init(TIMER1, &timer_initpara);
+ 133              		.loc 1 21 38 is_stmt 0
+ 134 00d6 230F0100 		sb	zero,30(sp)
+ 135              		.loc 1 22 5 is_stmt 1
+ 136 00da 97000000 		call	timer_init
+ 136      E7800000 
+ 137              	.LVL11:
+  23:pwm.c         **** 
+  24:pwm.c         ****     timer_channel_output_struct_para_init(&timer_ocinitpara);
+ 138              		.loc 1 24 5
+ 139 00e2 4800     		addi	a0,sp,4
+ 140 00e4 97000000 		call	timer_channel_output_struct_para_init
+ 140      E7800000 
+ 141              	.LVL12:
+  25:pwm.c         ****     timer_ocinitpara.outputstate  = TIMER_CCX_ENABLE;
+ 142              		.loc 1 25 5
+  26:pwm.c         ****     timer_ocinitpara.outputnstate = TIMER_CCXN_DISABLE;
+ 143              		.loc 1 26 5
+  27:pwm.c         ****     timer_ocinitpara.ocpolarity   = TIMER_OC_POLARITY_HIGH;
+ 144              		.loc 1 27 5
+  28:pwm.c         ****     timer_ocinitpara.ocnpolarity  = TIMER_OCN_POLARITY_HIGH;
+ 145              		.loc 1 28 5
+  29:pwm.c         ****     timer_ocinitpara.ocidlestate  = TIMER_OC_IDLE_STATE_LOW;
+ 146              		.loc 1 29 5
+  30:pwm.c         ****     timer_ocinitpara.ocnidlestate = TIMER_OCN_IDLE_STATE_LOW;
+ 147              		.loc 1 30 5
+  25:pwm.c         ****     timer_ocinitpara.outputnstate = TIMER_CCXN_DISABLE;
+ 148              		.loc 1 25 35 is_stmt 0
+ 149 00ec 8547     		li	a5,1
+ 150 00ee 3EC2     		sw	a5,4(sp)
+  27:pwm.c         ****     timer_ocinitpara.ocnpolarity  = TIMER_OCN_POLARITY_HIGH;
+ 151              		.loc 1 27 35
+ 152 00f0 02C4     		sw	zero,8(sp)
+  29:pwm.c         ****     timer_ocinitpara.ocnidlestate = TIMER_OCN_IDLE_STATE_LOW;
+ 153              		.loc 1 29 35
+ 154 00f2 02C6     		sw	zero,12(sp)
+  31:pwm.c         ****     if (ch&0x1) timer_channel_output_config(TIMER1,TIMER_CH_0,&timer_ocinitpara);
+ 155              		.loc 1 31 5 is_stmt 1
+ 156              		.loc 1 31 8 is_stmt 0
+ 157 00f4 638A0900 		beq	s3,zero,.L6
+ 158              		.loc 1 31 17 is_stmt 1 discriminator 1
+ 159 00f8 5000     		addi	a2,sp,4
+ 160 00fa 8145     		li	a1,0
+ 161 00fc 37050040 		li	a0,1073741824
+ 162 0100 97000000 		call	timer_channel_output_config
+ 162      E7800000 
+ 163              	.LVL13:
+ 164              	.L6:
+  32:pwm.c         ****     if (ch&0x2) timer_channel_output_config(TIMER1,TIMER_CH_1,&timer_ocinitpara);
+ 165              		.loc 1 32 5
+ 166              		.loc 1 32 8 is_stmt 0
+ 167 0108 630A0900 		beq	s2,zero,.L7
+ 168              		.loc 1 32 17 is_stmt 1 discriminator 1
+ 169 010c 5000     		addi	a2,sp,4
+ 170 010e 8545     		li	a1,1
+ 171 0110 37050040 		li	a0,1073741824
+ 172 0114 97000000 		call	timer_channel_output_config
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 5
+
+
+ 172      E7800000 
+ 173              	.LVL14:
+ 174              	.L7:
+  33:pwm.c         ****     if (ch&0x4) timer_channel_output_config(TIMER1,TIMER_CH_2,&timer_ocinitpara);
+ 175              		.loc 1 33 5
+ 176              		.loc 1 33 8 is_stmt 0
+ 177 011c 89C8     		beq	s1,zero,.L8
+ 178              		.loc 1 33 17 is_stmt 1 discriminator 1
+ 179 011e 5000     		addi	a2,sp,4
+ 180 0120 8945     		li	a1,2
+ 181 0122 37050040 		li	a0,1073741824
+ 182 0126 97000000 		call	timer_channel_output_config
+ 182      E7800000 
+ 183              	.LVL15:
+ 184              	.L8:
+  34:pwm.c         ****     if (ch&0x8) timer_channel_output_config(TIMER1,TIMER_CH_3,&timer_ocinitpara);
+ 185              		.loc 1 34 5
+ 186              		.loc 1 34 8 is_stmt 0
+ 187 012e 09C8     		beq	s0,zero,.L9
+ 188              		.loc 1 34 17 is_stmt 1 discriminator 1
+ 189 0130 5000     		addi	a2,sp,4
+ 190 0132 8D45     		li	a1,3
+ 191 0134 37050040 		li	a0,1073741824
+ 192 0138 97000000 		call	timer_channel_output_config
+ 192      E7800000 
+ 193              	.LVL16:
+ 194              	.L9:
+  35:pwm.c         **** 
+  36:pwm.c         ****     if (ch&0x1) {
+ 195              		.loc 1 36 5
+ 196              		.loc 1 36 8 is_stmt 0
+ 197 0140 638D0902 		beq	s3,zero,.L10
+  37:pwm.c         ****         timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_0,11999);
+ 198              		.loc 1 37 9 is_stmt 1
+ 199 0144 0D66     		li	a2,12288
+ 200 0146 1306F6ED 		addi	a2,a2,-289
+ 201 014a 8145     		li	a1,0
+ 202 014c 37050040 		li	a0,1073741824
+ 203 0150 97000000 		call	timer_channel_output_pulse_value_config
+ 203      E7800000 
+ 204              	.LVL17:
+  38:pwm.c         ****         timer_channel_output_mode_config(TIMER1,TIMER_CH_0,TIMER_OC_MODE_PWM0);
+ 205              		.loc 1 38 9
+ 206 0158 13060006 		li	a2,96
+ 207 015c 8145     		li	a1,0
+ 208 015e 37050040 		li	a0,1073741824
+ 209 0162 97000000 		call	timer_channel_output_mode_config
+ 209      E7800000 
+ 210              	.LVL18:
+  39:pwm.c         ****         timer_channel_output_shadow_config(TIMER1,TIMER_CH_0,TIMER_OC_SHADOW_DISABLE);
+ 211              		.loc 1 39 9
+ 212 016a 0146     		li	a2,0
+ 213 016c 8145     		li	a1,0
+ 214 016e 37050040 		li	a0,1073741824
+ 215 0172 97000000 		call	timer_channel_output_shadow_config
+ 215      E7800000 
+ 216              	.LVL19:
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 6
+
+
+ 217              	.L10:
+  40:pwm.c         ****     }
+  41:pwm.c         ****    if (ch&0x2) {
+ 218              		.loc 1 41 4
+ 219              		.loc 1 41 7 is_stmt 0
+ 220 017a 630D0902 		beq	s2,zero,.L11
+  42:pwm.c         ****         timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_1,11999);
+ 221              		.loc 1 42 9 is_stmt 1
+ 222 017e 0D66     		li	a2,12288
+ 223 0180 1306F6ED 		addi	a2,a2,-289
+ 224 0184 8545     		li	a1,1
+ 225 0186 37050040 		li	a0,1073741824
+ 226 018a 97000000 		call	timer_channel_output_pulse_value_config
+ 226      E7800000 
+ 227              	.LVL20:
+  43:pwm.c         ****         timer_channel_output_mode_config(TIMER1,TIMER_CH_1,TIMER_OC_MODE_PWM0);
+ 228              		.loc 1 43 9
+ 229 0192 13060006 		li	a2,96
+ 230 0196 8545     		li	a1,1
+ 231 0198 37050040 		li	a0,1073741824
+ 232 019c 97000000 		call	timer_channel_output_mode_config
+ 232      E7800000 
+ 233              	.LVL21:
+  44:pwm.c         ****         timer_channel_output_shadow_config(TIMER1,TIMER_CH_1,TIMER_OC_SHADOW_DISABLE);
+ 234              		.loc 1 44 9
+ 235 01a4 0146     		li	a2,0
+ 236 01a6 8545     		li	a1,1
+ 237 01a8 37050040 		li	a0,1073741824
+ 238 01ac 97000000 		call	timer_channel_output_shadow_config
+ 238      E7800000 
+ 239              	.LVL22:
+ 240              	.L11:
+  45:pwm.c         ****     }
+  46:pwm.c         ****    if (ch&0x4) {
+ 241              		.loc 1 46 4
+ 242              		.loc 1 46 7 is_stmt 0
+ 243 01b4 85CC     		beq	s1,zero,.L12
+  47:pwm.c         ****         timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_2,11999);
+ 244              		.loc 1 47 9 is_stmt 1
+ 245 01b6 0D66     		li	a2,12288
+ 246 01b8 1306F6ED 		addi	a2,a2,-289
+ 247 01bc 8945     		li	a1,2
+ 248 01be 37050040 		li	a0,1073741824
+ 249 01c2 97000000 		call	timer_channel_output_pulse_value_config
+ 249      E7800000 
+ 250              	.LVL23:
+  48:pwm.c         ****         timer_channel_output_mode_config(TIMER1,TIMER_CH_2,TIMER_OC_MODE_PWM0);
+ 251              		.loc 1 48 9
+ 252 01ca 13060006 		li	a2,96
+ 253 01ce 8945     		li	a1,2
+ 254 01d0 37050040 		li	a0,1073741824
+ 255 01d4 97000000 		call	timer_channel_output_mode_config
+ 255      E7800000 
+ 256              	.LVL24:
+  49:pwm.c         ****         timer_channel_output_shadow_config(TIMER1,TIMER_CH_2,TIMER_OC_SHADOW_DISABLE);
+ 257              		.loc 1 49 9
+ 258 01dc 0146     		li	a2,0
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 7
+
+
+ 259 01de 8945     		li	a1,2
+ 260 01e0 37050040 		li	a0,1073741824
+ 261 01e4 97000000 		call	timer_channel_output_shadow_config
+ 261      E7800000 
+ 262              	.LVL25:
+ 263              	.L12:
+  50:pwm.c         ****     }
+  51:pwm.c         ****    if (ch&0x8) {
+ 264              		.loc 1 51 4
+ 265              		.loc 1 51 7 is_stmt 0
+ 266 01ec 05CC     		beq	s0,zero,.L13
+  52:pwm.c         ****         timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_3,11999);
+ 267              		.loc 1 52 9 is_stmt 1
+ 268 01ee 0D66     		li	a2,12288
+ 269 01f0 1306F6ED 		addi	a2,a2,-289
+ 270 01f4 8D45     		li	a1,3
+ 271 01f6 37050040 		li	a0,1073741824
+ 272 01fa 97000000 		call	timer_channel_output_pulse_value_config
+ 272      E7800000 
+ 273              	.LVL26:
+  53:pwm.c         ****         timer_channel_output_mode_config(TIMER1,TIMER_CH_3,TIMER_OC_MODE_PWM0);
+ 274              		.loc 1 53 9
+ 275 0202 13060006 		li	a2,96
+ 276 0206 8D45     		li	a1,3
+ 277 0208 37050040 		li	a0,1073741824
+ 278 020c 97000000 		call	timer_channel_output_mode_config
+ 278      E7800000 
+ 279              	.LVL27:
+  54:pwm.c         ****         timer_channel_output_shadow_config(TIMER1,TIMER_CH_3,TIMER_OC_SHADOW_DISABLE);
+ 280              		.loc 1 54 9
+ 281 0214 0146     		li	a2,0
+ 282 0216 8D45     		li	a1,3
+ 283 0218 37050040 		li	a0,1073741824
+ 284 021c 97000000 		call	timer_channel_output_shadow_config
+ 284      E7800000 
+ 285              	.LVL28:
+ 286              	.L13:
+  55:pwm.c         ****     }
+  56:pwm.c         ****     
+  57:pwm.c         ****     timer_auto_reload_shadow_enable(TIMER1);
+ 287              		.loc 1 57 5
+ 288 0224 37050040 		li	a0,1073741824
+ 289 0228 97000000 		call	timer_auto_reload_shadow_enable
+ 289      E7800000 
+ 290              	.LVL29:
+  58:pwm.c         ****     timer_enable(TIMER1);
+ 291              		.loc 1 58 5
+ 292 0230 37050040 		li	a0,1073741824
+ 293 0234 97000000 		call	timer_enable
+ 293      E7800000 
+ 294              	.LVL30:
+  59:pwm.c         **** }
+ 295              		.loc 1 59 1 is_stmt 0
+ 296 023c F250     		lw	ra,60(sp)
+ 297              		.cfi_restore 1
+ 298 023e 6254     		lw	s0,56(sp)
+ 299              		.cfi_restore 8
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 8
+
+
+ 300 0240 D254     		lw	s1,52(sp)
+ 301              		.cfi_restore 9
+ 302 0242 4259     		lw	s2,48(sp)
+ 303              		.cfi_restore 18
+ 304 0244 B259     		lw	s3,44(sp)
+ 305              		.cfi_restore 19
+ 306 0246 2161     		addi	sp,sp,64
+ 307              	.LCFI1:
+ 308              		.cfi_def_cfa_offset 0
+ 309 0248 8280     		jr	ra
+ 310              		.cfi_endproc
+ 311              	.LFE2:
+ 313              		.section	.text.T1setPWMch2,"ax",@progbits
+ 314              		.align	1
+ 315              		.globl	T1setPWMch2
+ 317              	T1setPWMch2:
+ 318              	.LFB3:
+  60:pwm.c         **** 
+  61:pwm.c         **** void T1setPWMch2(int value){
+ 319              		.loc 1 61 28 is_stmt 1
+ 320              		.cfi_startproc
+ 321              	.LVL31:
+  62:pwm.c         ****     timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_0,value);
+ 322              		.loc 1 62 5
+ 323 0000 2A86     		mv	a2,a0
+ 324 0002 8145     		li	a1,0
+ 325 0004 37050040 		li	a0,1073741824
+ 326              	.LVL32:
+ 327 0008 17030000 		tail	timer_channel_output_pulse_value_config
+ 327      67000300 
+ 328              	.LVL33:
+ 329              		.cfi_endproc
+ 330              	.LFE3:
+ 332              		.globl	__floatsidf
+ 333              		.globl	__divdf3
+ 334              		.globl	__muldf3
+ 335              		.globl	__fixunsdfsi
+ 336              		.section	.text.T1setPWMmotorB,"ax",@progbits
+ 337              		.align	1
+ 338              		.globl	T1setPWMmotorB
+ 340              	T1setPWMmotorB:
+ 341              	.LFB4:
+  63:pwm.c         **** }
+  64:pwm.c         **** 
+  65:pwm.c         **** void T1setPWMmotorB(int throttel){
+ 342              		.loc 1 65 34
+ 343              		.cfi_startproc
+ 344              	.LVL34:
+  66:pwm.c         ****     if (throttel>0) {
+ 345              		.loc 1 66 5
+  65:pwm.c         ****     if (throttel>0) {
+ 346              		.loc 1 65 34 is_stmt 0
+ 347 0000 4111     		addi	sp,sp,-16
+ 348              	.LCFI2:
+ 349              		.cfi_def_cfa_offset 16
+ 350 0002 22C4     		sw	s0,8(sp)
+ 351 0004 26C2     		sw	s1,4(sp)
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 9
+
+
+ 352 0006 06C6     		sw	ra,12(sp)
+ 353 0008 4AC0     		sw	s2,0(sp)
+ 354              		.cfi_offset 8, -8
+ 355              		.cfi_offset 9, -12
+ 356              		.cfi_offset 1, -4
+ 357              		.cfi_offset 18, -16
+ 358 000a B7040000 		lui	s1,%hi(.LC0)
+ 359 000e 37040000 		lui	s0,%hi(.LC1)
+ 360              		.loc 1 66 8
+ 361 0012 635FA004 		ble	a0,zero,.L53
+  67:pwm.c         ****        timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_2,(throttel/100.0)*16000);
+ 362              		.loc 1 67 8 is_stmt 1
+ 363              		.loc 1 67 75 is_stmt 0
+ 364 0016 97000000 		call	__floatsidf
+ 364      E7800000 
+ 365              	.LVL35:
+ 366 001e 03A60400 		lw	a2,%lo(.LC0)(s1)
+ 367 0022 83A64400 		lw	a3,%lo(.LC0+4)(s1)
+ 368 0026 97000000 		call	__divdf3
+ 368      E7800000 
+ 369              	.LVL36:
+ 370              		.loc 1 67 82
+ 371 002e 03260400 		lw	a2,%lo(.LC1)(s0)
+ 372 0032 83264400 		lw	a3,%lo(.LC1+4)(s0)
+ 373 0036 97000000 		call	__muldf3
+ 373      E7800000 
+ 374              	.LVL37:
+ 375              		.loc 1 67 8
+ 376 003e 97000000 		call	__fixunsdfsi
+ 376      E7800000 
+ 377              	.LVL38:
+ 378 0046 2A86     		mv	a2,a0
+ 379 0048 8945     		li	a1,2
+ 380 004a 37050040 		li	a0,1073741824
+ 381 004e 97000000 		call	timer_channel_output_pulse_value_config
+ 381      E7800000 
+ 382              	.LVL39:
+  68:pwm.c         ****        timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_3,0);
+ 383              		.loc 1 68 8 is_stmt 1
+ 384 0056 0146     		li	a2,0
+ 385              	.L55:
+  69:pwm.c         ****     } else {
+  70:pwm.c         ****        timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_2,0);
+  71:pwm.c         ****        timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_3,(-throttel/100.0)*16000);
+  72:pwm.c         ****     }
+  73:pwm.c         **** }
+ 386              		.loc 1 73 1 is_stmt 0
+ 387 0058 2244     		lw	s0,8(sp)
+ 388              		.cfi_remember_state
+ 389              		.cfi_restore 8
+ 390 005a B240     		lw	ra,12(sp)
+ 391              		.cfi_restore 1
+ 392 005c 9244     		lw	s1,4(sp)
+ 393              		.cfi_restore 9
+ 394 005e 0249     		lw	s2,0(sp)
+ 395              		.cfi_restore 18
+  71:pwm.c         ****     }
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 10
+
+
+ 396              		.loc 1 71 8
+ 397 0060 8D45     		li	a1,3
+ 398              		.loc 1 73 1
+  71:pwm.c         ****     }
+ 399              		.loc 1 71 8
+ 400 0062 37050040 		li	a0,1073741824
+ 401              		.loc 1 73 1
+ 402 0066 4101     		addi	sp,sp,16
+ 403              	.LCFI3:
+ 404              		.cfi_def_cfa_offset 0
+  71:pwm.c         ****     }
+ 405              		.loc 1 71 8
+ 406 0068 17030000 		tail	timer_channel_output_pulse_value_config
+ 406      67000300 
+ 407              	.LVL40:
+ 408              	.L53:
+ 409              	.LCFI4:
+ 410              		.cfi_restore_state
+  70:pwm.c         ****        timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_3,(-throttel/100.0)*16000);
+ 411              		.loc 1 70 8
+ 412 0070 0146     		li	a2,0
+ 413 0072 2A89     		mv	s2,a0
+  70:pwm.c         ****        timer_channel_output_pulse_value_config(TIMER1,TIMER_CH_3,(-throttel/100.0)*16000);
+ 414              		.loc 1 70 8 is_stmt 1
+ 415 0074 8945     		li	a1,2
+ 416 0076 37050040 		li	a0,1073741824
+ 417              	.LVL41:
+ 418 007a 97000000 		call	timer_channel_output_pulse_value_config
+ 418      E7800000 
+ 419              	.LVL42:
+  71:pwm.c         ****     }
+ 420              		.loc 1 71 8
+  71:pwm.c         ****     }
+ 421              		.loc 1 71 76 is_stmt 0
+ 422 0082 33052041 		neg	a0,s2
+ 423 0086 97000000 		call	__floatsidf
+ 423      E7800000 
+ 424              	.LVL43:
+ 425 008e 03A60400 		lw	a2,%lo(.LC0)(s1)
+ 426 0092 83A64400 		lw	a3,%lo(.LC0+4)(s1)
+ 427 0096 97000000 		call	__divdf3
+ 427      E7800000 
+ 428              	.LVL44:
+  71:pwm.c         ****     }
+ 429              		.loc 1 71 83
+ 430 009e 03260400 		lw	a2,%lo(.LC1)(s0)
+ 431 00a2 83264400 		lw	a3,%lo(.LC1+4)(s0)
+ 432 00a6 97000000 		call	__muldf3
+ 432      E7800000 
+ 433              	.LVL45:
+  71:pwm.c         ****     }
+ 434              		.loc 1 71 8
+ 435 00ae 97000000 		call	__fixunsdfsi
+ 435      E7800000 
+ 436              	.LVL46:
+ 437 00b6 2A86     		mv	a2,a0
+ 438 00b8 45B7     		j	.L55
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 11
+
+
+ 439              		.cfi_endproc
+ 440              	.LFE4:
+ 442              		.section	.rodata.T1setPWMmotorB.cst8,"aM",@progbits,8
+ 443              		.align	3
+ 444              	.LC0:
+ 445 0000 00000000 		.word	0
+ 446 0004 00005940 		.word	1079574528
+ 447              	.LC1:
+ 448 0008 00000000 		.word	0
+ 449 000c 0040CF40 		.word	1087324160
+ 450              		.text
+ 451              	.Letext0:
+ 452              		.file 2 "c:\\kth\\digtal teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 453              		.file 3 "c:\\kth\\digtal teknik\\risc1\\toolchain-gd32v-v202-win\\compiler\\riscv64-unknown-elf\\i
+ 454              		.file 4 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_timer.h"
+ 455              		.file 5 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_rcu.h"
+ 456              		.file 6 "./../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_gpio.h"
+ 457              		.file 7 "./../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 pwm.c
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:13     .text.T1powerUpInitPWM:0000000000000000 T1powerUpInitPWM
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:17     .text.T1powerUpInitPWM:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:19     .text.T1powerUpInitPWM:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:20     .text.T1powerUpInitPWM:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:21     .text.T1powerUpInitPWM:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:22     .text.T1powerUpInitPWM:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:23     .text.T1powerUpInitPWM:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:25     .text.T1powerUpInitPWM:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:27     .text.T1powerUpInitPWM:0000000000000004 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:30     .text.T1powerUpInitPWM:0000000000000006 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:33     .text.T1powerUpInitPWM:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:37     .text.T1powerUpInitPWM:0000000000000012 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:38     .text.T1powerUpInitPWM:0000000000000012 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:39     .text.T1powerUpInitPWM:0000000000000012 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:40     .text.T1powerUpInitPWM:0000000000000012 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:42     .text.T1powerUpInitPWM:0000000000000012 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:45     .text.T1powerUpInitPWM:000000000000001a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:50     .text.T1powerUpInitPWM:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:51     .text.T1powerUpInitPWM:000000000000002a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:53     .text.T1powerUpInitPWM:000000000000002e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:62     .text.T1powerUpInitPWM:0000000000000044 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:64     .text.T1powerUpInitPWM:0000000000000048 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:66     .text.T1powerUpInitPWM:000000000000004c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:75     .text.T1powerUpInitPWM:0000000000000062 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:77     .text.T1powerUpInitPWM:0000000000000066 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:79     .text.T1powerUpInitPWM:0000000000000068 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:88     .text.T1powerUpInitPWM:000000000000007e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:90     .text.T1powerUpInitPWM:0000000000000080 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:92     .text.T1powerUpInitPWM:0000000000000082 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:101    .text.T1powerUpInitPWM:0000000000000098 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:105    .text.T1powerUpInitPWM:00000000000000a4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:109    .text.T1powerUpInitPWM:00000000000000b0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:113    .text.T1powerUpInitPWM:00000000000000ba .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:114    .text.T1powerUpInitPWM:00000000000000ba .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:115    .text.T1powerUpInitPWM:00000000000000ba .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:116    .text.T1powerUpInitPWM:00000000000000ba .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:119    .text.T1powerUpInitPWM:00000000000000c0 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:122    .text.T1powerUpInitPWM:00000000000000c6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:125    .text.T1powerUpInitPWM:00000000000000cc .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:127    .text.T1powerUpInitPWM:00000000000000ce .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:129    .text.T1powerUpInitPWM:00000000000000d2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:130    .text.T1powerUpInitPWM:00000000000000d2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:131    .text.T1powerUpInitPWM:00000000000000d2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:133    .text.T1powerUpInitPWM:00000000000000d6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:134    .text.T1powerUpInitPWM:00000000000000d6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:136    .text.T1powerUpInitPWM:00000000000000da .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:139    .text.T1powerUpInitPWM:00000000000000e2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:143    .text.T1powerUpInitPWM:00000000000000ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:144    .text.T1powerUpInitPWM:00000000000000ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:145    .text.T1powerUpInitPWM:00000000000000ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:146    .text.T1powerUpInitPWM:00000000000000ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:147    .text.T1powerUpInitPWM:00000000000000ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:148    .text.T1powerUpInitPWM:00000000000000ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:149    .text.T1powerUpInitPWM:00000000000000ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:152    .text.T1powerUpInitPWM:00000000000000f0 .L0 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 13
+
+
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:154    .text.T1powerUpInitPWM:00000000000000f2 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:156    .text.T1powerUpInitPWM:00000000000000f4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:157    .text.T1powerUpInitPWM:00000000000000f4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:159    .text.T1powerUpInitPWM:00000000000000f8 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:166    .text.T1powerUpInitPWM:0000000000000108 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:167    .text.T1powerUpInitPWM:0000000000000108 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:169    .text.T1powerUpInitPWM:000000000000010c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:176    .text.T1powerUpInitPWM:000000000000011c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:177    .text.T1powerUpInitPWM:000000000000011c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:179    .text.T1powerUpInitPWM:000000000000011e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:186    .text.T1powerUpInitPWM:000000000000012e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:187    .text.T1powerUpInitPWM:000000000000012e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:189    .text.T1powerUpInitPWM:0000000000000130 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:196    .text.T1powerUpInitPWM:0000000000000140 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:197    .text.T1powerUpInitPWM:0000000000000140 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:199    .text.T1powerUpInitPWM:0000000000000144 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:206    .text.T1powerUpInitPWM:0000000000000158 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:212    .text.T1powerUpInitPWM:000000000000016a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:219    .text.T1powerUpInitPWM:000000000000017a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:220    .text.T1powerUpInitPWM:000000000000017a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:222    .text.T1powerUpInitPWM:000000000000017e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:229    .text.T1powerUpInitPWM:0000000000000192 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:235    .text.T1powerUpInitPWM:00000000000001a4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:242    .text.T1powerUpInitPWM:00000000000001b4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:243    .text.T1powerUpInitPWM:00000000000001b4 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:245    .text.T1powerUpInitPWM:00000000000001b6 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:252    .text.T1powerUpInitPWM:00000000000001ca .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:258    .text.T1powerUpInitPWM:00000000000001dc .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:265    .text.T1powerUpInitPWM:00000000000001ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:266    .text.T1powerUpInitPWM:00000000000001ec .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:268    .text.T1powerUpInitPWM:00000000000001ee .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:275    .text.T1powerUpInitPWM:0000000000000202 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:281    .text.T1powerUpInitPWM:0000000000000214 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:288    .text.T1powerUpInitPWM:0000000000000224 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:292    .text.T1powerUpInitPWM:0000000000000230 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:296    .text.T1powerUpInitPWM:000000000000023c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:297    .text.T1powerUpInitPWM:000000000000023e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:299    .text.T1powerUpInitPWM:0000000000000240 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:301    .text.T1powerUpInitPWM:0000000000000242 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:303    .text.T1powerUpInitPWM:0000000000000244 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:305    .text.T1powerUpInitPWM:0000000000000246 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:308    .text.T1powerUpInitPWM:0000000000000248 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:310    .text.T1powerUpInitPWM:000000000000024a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:317    .text.T1setPWMch2:0000000000000000 T1setPWMch2
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:320    .text.T1setPWMch2:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:322    .text.T1setPWMch2:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:323    .text.T1setPWMch2:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:329    .text.T1setPWMch2:0000000000000010 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:340    .text.T1setPWMmotorB:0000000000000000 T1setPWMmotorB
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:343    .text.T1setPWMmotorB:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:345    .text.T1setPWMmotorB:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:346    .text.T1setPWMmotorB:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:347    .text.T1setPWMmotorB:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:349    .text.T1setPWMmotorB:0000000000000002 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:354    .text.T1setPWMmotorB:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:355    .text.T1setPWMmotorB:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:356    .text.T1setPWMmotorB:000000000000000a .L0 
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 14
+
+
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:357    .text.T1setPWMmotorB:000000000000000a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:361    .text.T1setPWMmotorB:0000000000000012 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:363    .text.T1setPWMmotorB:0000000000000016 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:364    .text.T1setPWMmotorB:0000000000000016 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:371    .text.T1setPWMmotorB:000000000000002e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:376    .text.T1setPWMmotorB:000000000000003e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:384    .text.T1setPWMmotorB:0000000000000056 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:387    .text.T1setPWMmotorB:0000000000000058 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:388    .text.T1setPWMmotorB:000000000000005a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:389    .text.T1setPWMmotorB:000000000000005a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:391    .text.T1setPWMmotorB:000000000000005c .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:393    .text.T1setPWMmotorB:000000000000005e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:395    .text.T1setPWMmotorB:0000000000000060 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:397    .text.T1setPWMmotorB:0000000000000060 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:399    .text.T1setPWMmotorB:0000000000000062 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:400    .text.T1setPWMmotorB:0000000000000062 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:402    .text.T1setPWMmotorB:0000000000000066 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:404    .text.T1setPWMmotorB:0000000000000068 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:406    .text.T1setPWMmotorB:0000000000000068 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:410    .text.T1setPWMmotorB:0000000000000070 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:412    .text.T1setPWMmotorB:0000000000000070 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:415    .text.T1setPWMmotorB:0000000000000074 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:421    .text.T1setPWMmotorB:0000000000000082 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:422    .text.T1setPWMmotorB:0000000000000082 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:430    .text.T1setPWMmotorB:000000000000009e .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:435    .text.T1setPWMmotorB:00000000000000ae .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:439    .text.T1setPWMmotorB:00000000000000ba .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:313    .text.T1powerUpInitPWM:000000000000024a .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:336    .text.T1setPWMch2:0000000000000010 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:442    .text.T1setPWMmotorB:00000000000000ba .L0 
+                     .debug_frame:0000000000000000 .L0 
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:60     .text.T1powerUpInitPWM:0000000000000044 .L2
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:73     .text.T1powerUpInitPWM:0000000000000062 .L3
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:86     .text.T1powerUpInitPWM:000000000000007e .L4
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:99     .text.T1powerUpInitPWM:0000000000000098 .L5
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:164    .text.T1powerUpInitPWM:0000000000000108 .L6
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:174    .text.T1powerUpInitPWM:000000000000011c .L7
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:184    .text.T1powerUpInitPWM:000000000000012e .L8
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:194    .text.T1powerUpInitPWM:0000000000000140 .L9
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:217    .text.T1powerUpInitPWM:000000000000017a .L10
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:240    .text.T1powerUpInitPWM:00000000000001b4 .L11
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:263    .text.T1powerUpInitPWM:00000000000001ec .L12
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:286    .text.T1powerUpInitPWM:0000000000000224 .L13
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:444    .rodata.T1setPWMmotorB.cst8:0000000000000000 .LC0
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:447    .rodata.T1setPWMmotorB.cst8:0000000000000008 .LC1
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:408    .text.T1setPWMmotorB:0000000000000070 .L53
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:385    .text.T1setPWMmotorB:0000000000000058 .L55
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:1649   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2165   .debug_str:0000000000000000 .LASF86
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2195   .debug_str:0000000000000140 .LASF87
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2213   .debug_str:000000000000019a .LASF88
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2153   .debug_ranges:0000000000000000 .Ldebug_ranges0
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2163   .debug_line:0000000000000000 .Ldebug_line0
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2269   .debug_str:000000000000034f .LASF0
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2263   .debug_str:0000000000000323 .LASF1
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2343   .debug_str:0000000000000555 .LASF4
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2253   .debug_str:00000000000002e3 .LASF2
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 15
+
+
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2231   .debug_str:0000000000000235 .LASF3
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2185   .debug_str:00000000000000e4 .LASF5
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2279   .debug_str:0000000000000391 .LASF6
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2219   .debug_str:00000000000001f8 .LASF7
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2181   .debug_str:00000000000000d1 .LASF8
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2301   .debug_str:0000000000000428 .LASF9
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2179   .debug_str:00000000000000c3 .LASF10
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2265   .debug_str:000000000000032f .LASF11
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2199   .debug_str:0000000000000155 .LASF12
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2271   .debug_str:000000000000035c .LASF13
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2267   .debug_str:0000000000000346 .LASF14
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2293   .debug_str:0000000000000401 .LASF89
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2201   .debug_str:000000000000015d .LASF15
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2295   .debug_str:0000000000000411 .LASF16
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2337   .debug_str:0000000000000524 .LASF17
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2333   .debug_str:000000000000050f .LASF18
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2315   .debug_str:000000000000047f .LASF19
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2237   .debug_str:0000000000000272 .LASF20
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2239   .debug_str:000000000000027d .LASF21
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2241   .debug_str:0000000000000288 .LASF22
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2243   .debug_str:0000000000000293 .LASF23
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2245   .debug_str:000000000000029e .LASF24
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2247   .debug_str:00000000000002a9 .LASF25
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2211   .debug_str:0000000000000190 .LASF26
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2223   .debug_str:000000000000020a .LASF27
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2225   .debug_str:0000000000000213 .LASF28
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2311   .debug_str:0000000000000469 .LASF29
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2313   .debug_str:0000000000000474 .LASF30
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2317   .debug_str:0000000000000489 .LASF31
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2319   .debug_str:0000000000000493 .LASF32
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2285   .debug_str:00000000000003d5 .LASF33
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2287   .debug_str:00000000000003de .LASF34
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2207   .debug_str:000000000000017e .LASF35
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2209   .debug_str:0000000000000187 .LASF36
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2261   .debug_str:000000000000031a .LASF37
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2259   .debug_str:0000000000000312 .LASF38
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2339   .debug_str:000000000000052c .LASF39
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2183   .debug_str:00000000000000dc .LASF40
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2299   .debug_str:0000000000000421 .LASF41
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2167   .debug_str:0000000000000088 .LASF42
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2169   .debug_str:0000000000000092 .LASF43
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2171   .debug_str:000000000000009c .LASF44
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2173   .debug_str:00000000000000a6 .LASF45
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2175   .debug_str:00000000000000b0 .LASF46
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2257   .debug_str:0000000000000309 .LASF47
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2291   .debug_str:00000000000003f8 .LASF48
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2235   .debug_str:0000000000000267 .LASF49
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2221   .debug_str:0000000000000201 .LASF50
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2309   .debug_str:000000000000045e .LASF51
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2275   .debug_str:0000000000000376 .LASF52
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2227   .debug_str:000000000000021c .LASF53
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2289   .debug_str:00000000000003e7 .LASF54
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2297   .debug_str:000000000000041a .LASF55
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2191   .debug_str:000000000000012c .LASF56
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2321   .debug_str:000000000000049d .LASF57
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2189   .debug_str:0000000000000115 .LASF58
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2205   .debug_str:0000000000000172 .LASF59
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 16
+
+
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2307   .debug_str:0000000000000451 .LASF60
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2325   .debug_str:00000000000004cf .LASF61
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2335   .debug_str:0000000000000518 .LASF62
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2203   .debug_str:0000000000000166 .LASF63
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2303   .debug_str:000000000000043a .LASF64
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2283   .debug_str:00000000000003bb .LASF65
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2249   .debug_str:00000000000002b4 .LASF66
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2215   .debug_str:00000000000001de .LASF67
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:341    .text.T1setPWMmotorB:0000000000000000 .LFB4
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:440    .text.T1setPWMmotorB:00000000000000ba .LFE4
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2041   .debug_loc:0000000000000000 .LLST3
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2177   .debug_str:00000000000000ba .LASF69
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2064   .debug_loc:0000000000000038 .LLST4
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:382    .text.T1setPWMmotorB:0000000000000056 .LVL39
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:407    .text.T1setPWMmotorB:0000000000000070 .LVL40
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:419    .text.T1setPWMmotorB:0000000000000082 .LVL42
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2329   .debug_str:00000000000004f6 .LASF68
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:318    .text.T1setPWMch2:0000000000000000 .LFB3
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:330    .text.T1setPWMch2:0000000000000010 .LFE3
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2193   .debug_str:000000000000013a .LASF70
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2086   .debug_loc:000000000000006f .LLST2
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:328    .text.T1setPWMch2:0000000000000010 .LVL33
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2277   .debug_str:0000000000000380 .LASF71
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:14     .text.T1powerUpInitPWM:0000000000000000 .LFB2
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:311    .text.T1powerUpInitPWM:000000000000024a .LFE2
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2104   .debug_loc:000000000000009b .LLST0
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2122   .debug_loc:00000000000000c8 .LLST1
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2273   .debug_str:0000000000000365 .LASF72
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2197   .debug_str:0000000000000146 .LASF73
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:43     .text.T1powerUpInitPWM:000000000000001a .LVL2
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:48     .text.T1powerUpInitPWM:000000000000002a .LVL3
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:59     .text.T1powerUpInitPWM:0000000000000044 .LVL4
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:72     .text.T1powerUpInitPWM:0000000000000062 .LVL5
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:85     .text.T1powerUpInitPWM:000000000000007e .LVL6
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:98     .text.T1powerUpInitPWM:0000000000000098 .LVL7
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:103    .text.T1powerUpInitPWM:00000000000000a4 .LVL8
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:107    .text.T1powerUpInitPWM:00000000000000b0 .LVL9
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:111    .text.T1powerUpInitPWM:00000000000000ba .LVL10
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:137    .text.T1powerUpInitPWM:00000000000000e2 .LVL11
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:141    .text.T1powerUpInitPWM:00000000000000ec .LVL12
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:163    .text.T1powerUpInitPWM:0000000000000108 .LVL13
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:173    .text.T1powerUpInitPWM:000000000000011c .LVL14
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:183    .text.T1powerUpInitPWM:000000000000012e .LVL15
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:193    .text.T1powerUpInitPWM:0000000000000140 .LVL16
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:204    .text.T1powerUpInitPWM:0000000000000158 .LVL17
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:210    .text.T1powerUpInitPWM:000000000000016a .LVL18
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:216    .text.T1powerUpInitPWM:000000000000017a .LVL19
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:227    .text.T1powerUpInitPWM:0000000000000192 .LVL20
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:233    .text.T1powerUpInitPWM:00000000000001a4 .LVL21
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:239    .text.T1powerUpInitPWM:00000000000001b4 .LVL22
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:250    .text.T1powerUpInitPWM:00000000000001ca .LVL23
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:256    .text.T1powerUpInitPWM:00000000000001dc .LVL24
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:262    .text.T1powerUpInitPWM:00000000000001ec .LVL25
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:273    .text.T1powerUpInitPWM:0000000000000202 .LVL26
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:279    .text.T1powerUpInitPWM:0000000000000214 .LVL27
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:285    .text.T1powerUpInitPWM:0000000000000224 .LVL28
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:290    .text.T1powerUpInitPWM:0000000000000230 .LVL29
+GAS LISTING C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s 			page 17
+
+
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:294    .text.T1powerUpInitPWM:000000000000023c .LVL30
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2233   .debug_str:000000000000023f .LASF74
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2255   .debug_str:00000000000002f1 .LASF75
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2305   .debug_str:0000000000000447 .LASF76
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2331   .debug_str:0000000000000502 .LASF77
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2281   .debug_str:00000000000003a4 .LASF78
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2217   .debug_str:00000000000001ed .LASF79
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2187   .debug_str:00000000000000ef .LASF80
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2327   .debug_str:00000000000004da .LASF81
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2341   .debug_str:0000000000000534 .LASF82
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2251   .debug_str:00000000000002c0 .LASF83
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2323   .debug_str:00000000000004af .LASF84
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:2229   .debug_str:0000000000000228 .LASF85
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:348    .text.T1setPWMmotorB:0000000000000002 .LCFI2
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:403    .text.T1setPWMmotorB:0000000000000068 .LCFI3
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:409    .text.T1setPWMmotorB:0000000000000070 .LCFI4
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:344    .text.T1setPWMmotorB:0000000000000000 .LVL34
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:365    .text.T1setPWMmotorB:000000000000001e .LVL35
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:417    .text.T1setPWMmotorB:000000000000007a .LVL41
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:321    .text.T1setPWMch2:0000000000000000 .LVL31
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:326    .text.T1setPWMch2:0000000000000008 .LVL32
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:24     .text.T1powerUpInitPWM:0000000000000002 .LCFI0
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:307    .text.T1powerUpInitPWM:0000000000000248 .LCFI1
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:18     .text.T1powerUpInitPWM:0000000000000000 .LVL0
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:31     .text.T1powerUpInitPWM:000000000000000a .LVL1
+C:\Users\zanil\AppData\Local\Temp\ccHzjUbB.s:459    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_init
+timer_deinit
+timer_struct_para_init
+timer_init
+timer_channel_output_struct_para_init
+timer_channel_output_config
+timer_channel_output_pulse_value_config
+timer_channel_output_mode_config
+timer_channel_output_shadow_config
+timer_auto_reload_shadow_enable
+timer_enable
+__floatsidf
+__divdf3
+__muldf3
+__fixunsdfsi
